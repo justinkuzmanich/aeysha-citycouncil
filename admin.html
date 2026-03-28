@@ -8,19 +8,11 @@
   <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --navy:   #1b3060;
-      --blue:   #5aace0;
-      --sky:    #a8d4f0;
-      --white:  #ffffff;
-      --bg:     #f2f6fb;
-      --border: #d0e2f0;
-      --text:   #1a2a3a;
-      --muted:  #6b8aaa;
-      --red:    #d94040;
+      --navy: #1b3060; --blue: #5aace0; --sky: #a8d4f0;
+      --white: #ffffff; --bg: #f2f6fb; --border: #d0e2f0;
+      --text: #1a2a3a; --muted: #6b8aaa; --red: #d94040; --green: #2a9d6b;
     }
-
     body { font-family: 'Barlow', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
 
     /* ── HEADER ── */
@@ -28,28 +20,35 @@
     .header-inner { max-width: 1400px; margin: 0 auto; padding: 0 24px; height: 60px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
     .header-left { display: flex; align-items: center; gap: 12px; }
     .brand { font-family: 'Barlow Condensed', sans-serif; font-size: 16px; font-weight: 700; letter-spacing: 0.08em; color: var(--sky); }
-    .page-title { font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.55); padding-left: 12px; border-left: 1px solid rgba(255,255,255,0.2); }
+    .page-title { font-size: 13px; color: rgba(255,255,255,0.55); padding-left: 12px; border-left: 1px solid rgba(255,255,255,0.2); }
     .header-right { display: flex; align-items: center; gap: 10px; }
-
     .unsaved-badge { font-size: 12px; font-weight: 600; color: #ffc842; display: none; align-items: center; gap: 5px; }
     .unsaved-badge.visible { display: flex; }
     .unsaved-dot { width: 7px; height: 7px; border-radius: 50%; background: #ffc842; }
-
-    .btn-preview { font-family: 'Barlow', sans-serif; font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.7); text-decoration: none; padding: 6px 14px; border: 1px solid rgba(255,255,255,0.2); border-radius: 4px; transition: all 0.15s; }
-    .btn-preview:hover { color: var(--white); border-color: rgba(255,255,255,0.5); }
-
+    .btn-hdr { font-family: 'Barlow', sans-serif; font-size: 13px; font-weight: 600; background: none; color: rgba(255,255,255,0.7); border: 1px solid rgba(255,255,255,0.2); border-radius: 4px; padding: 6px 14px; cursor: pointer; transition: all 0.15s; text-decoration: none; }
+    .btn-hdr:hover { color: var(--white); border-color: rgba(255,255,255,0.5); }
     .btn-save { font-family: 'Barlow', sans-serif; font-size: 13px; font-weight: 700; background: var(--blue); color: var(--white); border: none; padding: 8px 20px; border-radius: 4px; cursor: pointer; transition: background 0.15s; }
-    .btn-save:hover { background: #4a9dd0; }
+    .btn-save:hover:not(:disabled) { background: #4a9dd0; }
     .btn-save:disabled { background: var(--muted); cursor: default; }
 
-    /* ── SAVE INSTRUCTIONS BANNER ── */
-    .save-banner { background: #1a2a3a; color: rgba(255,255,255,0.8); font-size: 13px; text-align: center; padding: 10px 24px; line-height: 1.5; display: none; }
-    .save-banner.visible { display: block; }
-    .save-banner code { background: rgba(255,255,255,0.15); padding: 2px 6px; border-radius: 3px; font-size: 12px; }
+    /* ── TOKEN SETUP SCREEN ── */
+    #tokenScreen { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: calc(100vh - 60px); gap: 16px; padding: 40px; text-align: center; }
+    .setup-icon { font-size: 40px; margin-bottom: 4px; }
+    .setup-h { font-family: 'Barlow Condensed', sans-serif; font-size: 26px; font-weight: 700; color: var(--navy); }
+    .setup-sub { font-size: 14px; color: var(--muted); max-width: 420px; line-height: 1.6; }
+    .token-box { display: flex; gap: 8px; width: 100%; max-width: 480px; margin-top: 4px; }
+    .token-input { flex: 1; font-family: 'Barlow', sans-serif; font-size: 13px; padding: 10px 14px; border: 1px solid var(--border); border-radius: 4px; outline: none; color: var(--text); }
+    .token-input:focus { border-color: var(--blue); }
+    .btn-connect { font-family: 'Barlow', sans-serif; font-size: 13px; font-weight: 700; background: var(--navy); color: var(--white); border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; white-space: nowrap; }
+    .btn-connect:hover { background: #24407a; }
+    .setup-hint { font-size: 12px; color: var(--muted); max-width: 420px; line-height: 1.7; }
+    .setup-hint a { color: var(--blue); }
+    .setup-hint code { background: #e8f0f8; padding: 1px 5px; border-radius: 3px; font-size: 11px; }
+    .token-error { font-size: 13px; color: var(--red); display: none; }
+    .token-error.visible { display: block; }
 
     /* ── MAIN ── */
-    main { max-width: 1400px; margin: 0 auto; padding: 32px 24px 64px; }
-
+    main { max-width: 1400px; margin: 0 auto; padding: 32px 24px 64px; display: none; }
     .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; align-items: start; }
     @media (max-width: 960px) { .grid { grid-template-columns: 1fr; } }
 
@@ -61,34 +60,37 @@
     .col-name-input:hover, .col-name-input:focus { border-bottom-color: var(--sky); }
     .col-count { font-size: 12px; color: rgba(255,255,255,0.45); flex-shrink: 0; white-space: nowrap; }
 
-    /* ── ITEM LIST ── */
+    /* ── ITEMS ── */
     .item-list { list-style: none; padding: 8px 0; min-height: 48px; }
-    .item { display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-bottom: 1px solid var(--border); transition: background 0.1s; }
+    .item { display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-bottom: 1px solid var(--border); }
     .item:last-child { border-bottom: none; }
     .item.drag-over { background: #e8f4fc; border-top: 2px solid var(--blue); }
     .item.dragging { opacity: 0.4; }
     .item.new-item { background: #edf6fd; }
-
-    .drag-handle { color: var(--muted); font-size: 16px; cursor: grab; flex-shrink: 0; padding: 2px; user-select: none; line-height: 1; }
+    .drag-handle { color: var(--muted); font-size: 16px; cursor: grab; flex-shrink: 0; padding: 2px; user-select: none; }
     .drag-handle:active { cursor: grabbing; }
-
     .item-fields { flex: 1; display: flex; flex-direction: column; gap: 3px; min-width: 0; }
     .item-input { font-family: 'Barlow', sans-serif; font-size: 13px; border: none; outline: none; background: transparent; width: 100%; padding: 1px 0; color: var(--text); border-bottom: 1px solid transparent; transition: border-color 0.15s; }
     .item-input:focus { border-bottom-color: var(--blue); }
     .item-title-input { font-weight: 600; }
-    .item-name-input  { color: var(--muted); font-size: 12px; }
-
-    .btn-delete { flex-shrink: 0; background: none; border: none; color: var(--muted); font-size: 15px; cursor: pointer; padding: 4px 6px; border-radius: 3px; line-height: 1; transition: color 0.15s, background 0.15s; }
+    .item-name-input { color: var(--muted); font-size: 12px; }
+    .btn-delete { flex-shrink: 0; background: none; border: none; color: var(--muted); font-size: 15px; cursor: pointer; padding: 4px 6px; border-radius: 3px; transition: color 0.15s, background 0.15s; }
     .btn-delete:hover { color: var(--red); background: #fdecea; }
-
     .col-footer { padding: 12px; border-top: 1px solid var(--border); }
     .btn-add { font-family: 'Barlow', sans-serif; font-size: 13px; font-weight: 600; color: var(--blue); background: none; border: 1px dashed var(--sky); border-radius: 4px; width: 100%; padding: 8px; cursor: pointer; transition: all 0.15s; }
     .btn-add:hover { background: #edf6fd; border-color: var(--blue); }
 
+    /* ── DEPLOY BANNER ── */
+    .deploy-banner { background: #eaf7f1; border: 1px solid #a3ddc0; border-radius: 6px; padding: 14px 20px; margin-bottom: 24px; font-size: 13px; color: #1a5c3a; display: none; align-items: center; gap: 10px; }
+    .deploy-banner.visible { display: flex; }
+    .deploy-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); animation: pulse 1.5s infinite; flex-shrink: 0; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
     /* ── TOAST ── */
-    .toast { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(12px); background: var(--navy); color: var(--white); font-size: 13px; font-weight: 600; padding: 10px 24px; border-radius: 6px; opacity: 0; transition: opacity 0.2s, transform 0.2s; pointer-events: none; white-space: nowrap; }
+    .toast { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(12px); background: var(--navy); color: var(--white); font-size: 13px; font-weight: 600; padding: 10px 24px; border-radius: 6px; opacity: 0; transition: opacity 0.2s, transform 0.2s; pointer-events: none; white-space: nowrap; z-index: 200; }
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
     .toast.error { background: var(--red); }
+    .toast.success { background: var(--green); }
   </style>
 </head>
 <body>
@@ -101,39 +103,96 @@
     </div>
     <div class="header-right">
       <span class="unsaved-badge" id="unsavedBadge"><span class="unsaved-dot"></span> Unsaved changes</span>
-      <a href="index.html" target="_blank" class="btn-preview">Preview Site ↗</a>
-      <button class="btn-save" id="saveBtn" onclick="saveData()">Save Changes</button>
+      <a href="index.html" target="_blank" class="btn-hdr">Preview Site ↗</a>
+      <button class="btn-hdr" onclick="clearToken()" id="tokenBtn" style="display:none">⚙ Token</button>
+      <button class="btn-save" id="saveBtn" onclick="saveAndDeploy()" style="display:none">Save &amp; Deploy</button>
     </div>
   </div>
 </header>
 
-<div class="save-banner" id="saveBanner">
-  After saving, replace your local <code>data/endorsements.json</code> with the downloaded file, then run:
-  <code>git add data/endorsements.json &amp;&amp; git commit -m "update endorsements" &amp;&amp; git push</code>
+<!-- Token setup screen -->
+<div id="tokenScreen">
+  <div class="setup-icon">🔑</div>
+  <h1 class="setup-h">Connect to GitHub</h1>
+  <p class="setup-sub">Enter a GitHub personal access token to save changes directly to the repo. Netlify will redeploy automatically.</p>
+  <div class="token-box">
+    <input class="token-input" id="tokenInput" type="password" placeholder="github_pat_..." onkeydown="if(event.key==='Enter')connect()" />
+    <button class="btn-connect" onclick="connect()">Connect</button>
+  </div>
+  <p class="token-error" id="tokenError"></p>
+  <p class="setup-hint">
+    <a href="https://github.com/settings/personal-access-tokens/new" target="_blank">Create a fine-grained token →</a><br>
+    Set <strong>Repository access</strong> to <code>aeysha-citycouncil</code> only.<br>
+    Under <strong>Permissions → Contents</strong>, choose <code>Read and write</code>.<br>
+    Your token is stored only in this browser.
+  </p>
 </div>
 
-<main>
-  <div class="grid" id="grid">
-    <div style="padding:40px;text-align:center;color:var(--muted);grid-column:1/-1">Loading endorsements…</div>
+<!-- CMS panel -->
+<main id="main">
+  <div class="deploy-banner" id="deployBanner">
+    <span class="deploy-dot"></span>
+    <span>Deploying to Netlify — changes will be live in about 1 minute.</span>
   </div>
+  <div class="grid" id="grid"></div>
 </main>
 
 <div class="toast" id="toast"></div>
 
 <script>
-  let dirty = false;
-  let dragSrc = null;
+  const REPO  = 'justinkuzmanich/aeysha-citycouncil';
+  const FILE  = 'data/endorsements.json';
+  const API   = `https://api.github.com/repos/${REPO}/contents/${FILE}`;
 
-  // ── Boot: fetch endorsements from the site ───────────────────────────────
+  let fileSha  = null;
+  let dirty    = false;
+  let dragSrc  = null;
 
-  fetch('/data/endorsements.json')
-    .then(r => { if (!r.ok) throw new Error(); return r.json(); })
-    .then(data => render(data))
-    .catch(() => {
-      document.getElementById('grid').innerHTML =
-        '<div style="padding:40px;text-align:center;color:var(--red);grid-column:1/-1">' +
-        'Could not load endorsements.json.</div>';
+  // ── Boot ─────────────────────────────────────────────────────────────────
+
+  const savedToken = localStorage.getItem('gh_token');
+  if (savedToken) loadCMS(savedToken);
+
+  async function connect() {
+    const token = document.getElementById('tokenInput').value.trim();
+    if (!token) return;
+    const err = document.getElementById('tokenError');
+    err.classList.remove('visible');
+    document.querySelector('.btn-connect').textContent = 'Connecting…';
+    try {
+      await loadCMS(token);
+      localStorage.setItem('gh_token', token);
+    } catch (e) {
+      err.textContent = 'Could not connect. Check your token and try again.';
+      err.classList.add('visible');
+      document.querySelector('.btn-connect').textContent = 'Connect';
+    }
+  }
+
+  async function loadCMS(token) {
+    // Fetch file metadata + content from GitHub
+    const res = await fetch(API, {
+      headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json' }
     });
+    if (!res.ok) throw new Error(res.status);
+    const meta = await res.json();
+    fileSha = meta.sha;
+    const data = JSON.parse(atob(meta.content.replace(/\n/g, '')));
+
+    render(data);
+
+    // Show CMS, hide setup
+    document.getElementById('tokenScreen').style.display = 'none';
+    document.getElementById('main').style.display = 'block';
+    document.getElementById('saveBtn').style.display = 'inline-block';
+    document.getElementById('tokenBtn').style.display = 'inline-block';
+  }
+
+  function clearToken() {
+    if (!confirm('Disconnect and clear your saved token?')) return;
+    localStorage.removeItem('gh_token');
+    location.reload();
+  }
 
   // ── Render ───────────────────────────────────────────────────────────────
 
@@ -145,8 +204,7 @@
           <input class="col-name-input" value="${esc(cat.name)}" oninput="markDirty()" />
           <span class="col-count" id="count-${ci}">${cat.endorsements.length}</span>
         </div>
-        <ul class="item-list" id="list-${ci}"
-            ondragover="onDragOver(event)" ondrop="onDrop(event)">
+        <ul class="item-list" ondragover="onDragOver(event)" ondrop="onDrop(event)">
           ${cat.endorsements.map(e => itemHTML(e)).join('')}
         </ul>
         <div class="col-footer">
@@ -213,7 +271,6 @@
   }
   function onDragOver(e) {
     e.preventDefault();
-    e.dataTransfer.dropEffect = 'move';
     const target = e.target.closest('.item');
     document.querySelectorAll('.item').forEach(el => el.classList.remove('drag-over'));
     if (target && target !== dragSrc) target.classList.add('drag-over');
@@ -230,7 +287,7 @@
     markDirty();
   }
 
-  // ── Collect & Save ───────────────────────────────────────────────────────
+  // ── Save & Deploy ────────────────────────────────────────────────────────
 
   function collectData() {
     return {
@@ -245,18 +302,45 @@
     };
   }
 
-  function saveData() {
-    const json = JSON.stringify(collectData(), null, 2);
-    const blob = new Blob([json], { type: 'application/json' });
-    const url  = URL.createObjectURL(blob);
-    const a    = document.createElement('a');
-    a.href     = url;
-    a.download = 'endorsements.json';
-    a.click();
-    URL.revokeObjectURL(url);
-    clearDirty();
-    document.getElementById('saveBanner').classList.add('visible');
-    showToast('File downloaded!');
+  async function saveAndDeploy() {
+    const token = localStorage.getItem('gh_token');
+    if (!token) { showToast('No token saved.', 'error'); return; }
+
+    const btn = document.getElementById('saveBtn');
+    btn.disabled = true;
+    btn.textContent = 'Deploying…';
+
+    const json    = JSON.stringify(collectData(), null, 2);
+    const content = btoa(unescape(encodeURIComponent(json)));
+
+    try {
+      const res = await fetch(API, {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: 'application/vnd.github+json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message: 'Update endorsements via admin panel',
+          content,
+          sha: fileSha,
+        }),
+      });
+
+      if (!res.ok) throw new Error(res.status);
+      const result = await res.json();
+      fileSha = result.content.sha; // update sha for next save
+      clearDirty();
+      showToast('Deployed! Live in ~1 min.', 'success');
+      document.getElementById('deployBanner').classList.add('visible');
+      setTimeout(() => document.getElementById('deployBanner').classList.remove('visible'), 90000);
+    } catch {
+      showToast('Deploy failed. Check your token.', 'error');
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Save & Deploy';
+    }
   }
 
   // ── Dirty state ──────────────────────────────────────────────────────────
@@ -274,13 +358,13 @@
   // ── Toast ────────────────────────────────────────────────────────────────
 
   let toastTimer;
-  function showToast(msg, isError = false) {
+  function showToast(msg, type = '') {
     const t = document.getElementById('toast');
     t.textContent = msg;
-    t.className = 'toast' + (isError ? ' error' : '');
+    t.className = 'toast' + (type ? ` ${type}` : '');
     clearTimeout(toastTimer);
     requestAnimationFrame(() => requestAnimationFrame(() => t.classList.add('show')));
-    toastTimer = setTimeout(() => t.classList.remove('show'), 3500);
+    toastTimer = setTimeout(() => t.classList.remove('show'), 4000);
   }
 
   // ── Util ─────────────────────────────────────────────────────────────────
