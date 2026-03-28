@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(start chrome:*)",
+      "Bash(python -m http.server 8080)",
+      "Bash(where python:*)",
+      "Bash(where python3:*)",
+      "Bash(python server.py)",
+      "Bash(curl -s http://localhost:3000/api/endorsements)",
+      "Bash(python3 server.py)",
+      "Bash(py --version)",
+      "Bash(py3 --version)",
+      "Bash(/c/Users/justi/AppData/Local/Microsoft/WindowsApps/python3 --version)",
+      "Bash(cmd /c \"python --version\")",
+      "Bash(cmd /c \"python3 --version\")",
+      "Bash(cmd /c \"py --version\")",
+      "Bash(cmd /c \"where python\")",
+      "Bash(cmd /c \"where py\")",
+      "Bash(git --version)"
+    ]
+  }
+}
