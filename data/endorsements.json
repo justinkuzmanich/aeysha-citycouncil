@@ -1,9 +1,21 @@
 {
   "logos": [
-    { "src": "images/image3.webp", "alt": "Contra Costa Deputy Sheriffs Association" },
-    { "src": "images/image4.png",  "alt": "California Association of Realtors" },
-    { "src": "images/image3.webp", "alt": "Contra Costa Deputy Sheriffs Association" },
-    { "src": "images/image4.png",  "alt": "California Association of Realtors" }
+    {
+      "src": "images/image3.webp",
+      "alt": "Contra Costa Deputy Sheriffs Association"
+    },
+    {
+      "src": "images/logo2.png",
+      "alt": "Blu Sky Films"
+    },
+    {
+      "src": "images/image3.webp",
+      "alt": "Contra Costa Deputy Sheriffs Association"
+    },
+    {
+      "src": "images/image4.png",
+      "alt": "California Association of Realtors"
+    }
   ],
   "categories": [
     {
