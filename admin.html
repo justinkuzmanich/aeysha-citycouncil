@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Endorsements Admin — Corio for Concord</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:   #1b3060;
+      --blue:   #5aace0;
+      --sky:    #a8d4f0;
+      --white:  #ffffff;
+      --bg:     #f2f6fb;
+      --border: #d0e2f0;
+      --text:   #1a2a3a;
+      --muted:  #6b8aaa;
+      --red:    #d94040;
+    }
+
+    body {
+      font-family: 'Barlow', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background: var(--navy);
+      color: var(--white);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.25);
+    }
+    .header-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 24px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .brand { font-family: 'Barlow Condensed', sans-serif; font-size: 16px; font-weight: 700; letter-spacing: 0.08em; color: var(--sky); }
+    .page-title { font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.55); padding-left: 12px; border-left: 1px solid rgba(255,255,255,0.2); }
+    .header-right { display: flex; align-items: center; gap: 10px; }
+
+    .unsaved-badge { font-size: 12px; font-weight: 600; color: #ffc842; display: none; align-items: center; gap: 5px; }
+    .unsaved-badge.visible { display: flex; }
+    .unsaved-dot { width: 7px; height: 7px; border-radius: 50%; background: #ffc842; }
+
+    .btn-open {
+      font-family: 'Barlow', sans-serif; font-size: 13px; font-weight: 600;
+      color: rgba(255,255,255,0.7); background: none;
+      border: 1px solid rgba(255,255,255,0.2); border-radius: 4px;
+      padding: 6px 14px; cursor: pointer; transition: all 0.15s;
+    }
+    .btn-open:hover { color: var(--white); border-color: rgba(255,255,255,0.5); }
+
+    .btn-save {
+      font-family: 'Barlow', sans-serif; font-size: 13px; font-weight: 700;
+      background: var(--blue); color: var(--white); border: none;
+      padding: 8px 20px; border-radius: 4px; cursor: pointer; transition: background 0.15s;
+    }
+    .btn-save:hover { background: #4a9dd0; }
+    .btn-save:disabled { background: var(--muted); cursor: default; }
+
+    /* ── WELCOME SCREEN ── */
+    #welcome {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      min-height: calc(100vh - 60px); gap: 20px; padding: 40px;
+      text-align: center;
+    }
+    .welcome-icon { font-size: 48px; margin-bottom: 8px; }
+    .welcome-h { font-family: 'Barlow Condensed', sans-serif; font-size: 28px; font-weight: 700; color: var(--navy); letter-spacing: 0.04em; }
+    .welcome-sub { font-size: 15px; color: var(--muted); max-width: 380px; line-height: 1.6; }
+    .btn-load {
+      font-family: 'Barlow', sans-serif; font-size: 15px; font-weight: 700;
+      background: var(--navy); color: var(--white); border: none;
+      padding: 14px 32px; border-radius: 6px; cursor: pointer;
+      transition: background 0.15s; margin-top: 8px;
+    }
+    .btn-load:hover { background: #24407a; }
+    .welcome-hint { font-size: 12px; color: var(--muted); }
+
+    /* ── MAIN ── */
+    main { max-width: 1400px; margin: 0 auto; padding: 32px 24px 64px; display: none; }
+
+    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; align-items: start; }
+    @media (max-width: 960px) { .grid { grid-template-columns: 1fr; } }
+
+    /* ── COLUMN CARD ── */
+    .column { background: var(--white); border-radius: 8px; border: 1px solid var(--border); overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+    .col-header { background: var(--navy); padding: 16px 20px; display: flex; align-items: center; gap: 12px; }
+    .col-icon { font-size: 18px; color: var(--sky); flex-shrink: 0; }
+    .col-name-input {
+      font-family: 'Barlow Condensed', sans-serif; font-size: 17px; font-weight: 700;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      color: var(--white); background: transparent; border: none;
+      border-bottom: 1px solid transparent; outline: none; width: 100%; padding: 2px 0;
+      transition: border-color 0.15s;
+    }
+    .col-name-input:hover, .col-name-input:focus { border-bottom-color: var(--sky); }
+    .col-count { font-size: 12px; color: rgba(255,255,255,0.45); flex-shrink: 0; white-space: nowrap; }
+
+    /* ── ITEM LIST ── */
+    .item-list { list-style: none; padding: 8px 0; min-height: 48px; }
+    .item {
+      display: flex; align-items: center; gap: 8px;
+      padding: 8px 12px; border-bottom: 1px solid var(--border); transition: background 0.1s;
+    }
+    .item:last-child { border-bottom: none; }
+    .item.drag-over { background: #e8f4fc; border-top: 2px solid var(--blue); }
+    .item.dragging { opacity: 0.4; }
+    .item.new-item { background: #edf6fd; }
+
+    .drag-handle { color: var(--muted); font-size: 16px; cursor: grab; flex-shrink: 0; padding: 2px; user-select: none; line-height: 1; }
+    .drag-handle:active { cursor: grabbing; }
+
+    .item-fields { flex: 1; display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+    .item-input {
+      font-family: 'Barlow', sans-serif; font-size: 13px; border: none; outline: none;
+      background: transparent; width: 100%; padding: 1px 0; color: var(--text);
+      border-bottom: 1px solid transparent; transition: border-color 0.15s;
+    }
+    .item-input:focus { border-bottom-color: var(--blue); }
+    .item-title-input { font-weight: 600; }
+    .item-name-input  { color: var(--muted); font-size: 12px; }
+
+    .btn-delete {
+      flex-shrink: 0; background: none; border: none; color: var(--muted);
+      font-size: 15px; cursor: pointer; padding: 4px 6px; border-radius: 3px;
+      line-height: 1; transition: color 0.15s, background 0.15s;
+    }
+    .btn-delete:hover { color: var(--red); background: #fdecea; }
+
+    /* ── FOOTER ── */
+    .col-footer { padding: 12px; border-top: 1px solid var(--border); }
+    .btn-add {
+      font-family: 'Barlow', sans-serif; font-size: 13px; font-weight: 600;
+      color: var(--blue); background: none; border: 1px dashed var(--sky);
+      border-radius: 4px; width: 100%; padding: 8px; cursor: pointer; transition: all 0.15s;
+    }
+    .btn-add:hover { background: #edf6fd; border-color: var(--blue); }
+
+    /* ── TOAST ── */
+    .toast {
+      position: fixed; bottom: 28px; left: 50%;
+      transform: translateX(-50%) translateY(12px);
+      background: var(--navy); color: var(--white); font-size: 13px; font-weight: 600;
+      padding: 10px 24px; border-radius: 6px; opacity: 0;
+      transition: opacity 0.2s, transform 0.2s; pointer-events: none; white-space: nowrap;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    .toast.error { background: var(--red); }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="header-left" style="display:flex;align-items:center;gap:12px;">
+      <span class="brand">CORIO FOR CONCORD</span>
+      <span class="page-title">Endorsements Admin</span>
+    </div>
+    <div class="header-right">
+      <span class="unsaved-badge" id="unsavedBadge"><span class="unsaved-dot"></span> Unsaved changes</span>
+      <button class="btn-open" onclick="openFile()" id="openBtn" style="display:none">Open File</button>
+      <button class="btn-save" onclick="saveFile()" id="saveBtn" style="display:none">Save Changes</button>
+    </div>
+  </div>
+</header>
+
+<!-- Welcome / load screen -->
+<div id="welcome">
+  <div class="welcome-icon">📋</div>
+  <h1 class="welcome-h">Endorsements Admin</h1>
+  <p class="welcome-sub">Open the <code>endorsements.json</code> file from your project to start editing.</p>
+  <button class="btn-load" onclick="openFile()">Open endorsements.json</button>
+  <p class="welcome-hint">Navigate to <strong>data / endorsements.json</strong> inside the project folder.</p>
+</div>
+
+<!-- CMS UI (hidden until file is loaded) -->
+<main id="main">
+  <div class="grid" id="grid"></div>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  let fileHandle = null;
+  let dirty = false;
+  let dragSrc = null;
+
+  // ── File Access ─────────────────────────────────────────────────────────
+
+  async function openFile() {
+    try {
+      [fileHandle] = await window.showOpenFilePicker({
+        types: [{ description: 'JSON', accept: { 'application/json': ['.json'] } }],
+        multiple: false,
+        startIn: 'documents',
+      });
+      const file = await fileHandle.getFile();
+      const text = await file.text();
+      render(JSON.parse(text));
+      showCMS();
+    } catch (e) {
+      if (e.name !== 'AbortError') showToast('Could not open file.', true);
+    }
+  }
+
+  async function saveFile() {
+    if (!fileHandle) return;
+    const btn = document.getElementById('saveBtn');
+    btn.disabled = true;
+    btn.textContent = 'Saving…';
+    try {
+      const writable = await fileHandle.createWritable();
+      await writable.write(JSON.stringify(collectData(), null, 2));
+      await writable.close();
+      clearDirty();
+      showToast('Changes saved!');
+    } catch (e) {
+      showToast('Save failed.', true);
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Save Changes';
+    }
+  }
+
+  function showCMS() {
+    document.getElementById('welcome').style.display = 'none';
+    document.getElementById('main').style.display = 'block';
+    document.getElementById('openBtn').style.display = 'inline-block';
+    document.getElementById('saveBtn').style.display = 'inline-block';
+  }
+
+  // ── Render ───────────────────────────────────────────────────────────────
+
+  function render(data) {
+    const grid = document.getElementById('grid');
+    grid.innerHTML = data.categories.map((cat, ci) => `
+      <div class="column" data-icon="${cat.icon}">
+        <div class="col-header">
+          <span class="col-icon">${cat.icon}</span>
+          <input class="col-name-input" value="${esc(cat.name)}" oninput="markDirty()" />
+          <span class="col-count" id="count-${ci}">${cat.endorsements.length}</span>
+        </div>
+        <ul class="item-list" id="list-${ci}"
+            ondragover="onDragOver(event)" ondrop="onDrop(event)">
+          ${cat.endorsements.map(e => itemHTML(e)).join('')}
+        </ul>
+        <div class="col-footer">
+          <button class="btn-add" onclick="addItem(this)">+ Add Endorsement</button>
+        </div>
+      </div>
+    `).join('');
+    clearDirty();
+  }
+
+  function itemHTML(e = {}) {
+    return `
+      <li class="item" draggable="true"
+          ondragstart="onDragStart(event)" ondragend="onDragEnd(event)">
+        <span class="drag-handle" title="Drag to reorder">⠿</span>
+        <div class="item-fields">
+          <input class="item-input item-title-input" value="${esc(e.title || '')}" placeholder="Title / Organization" oninput="markDirty()" />
+          <input class="item-input item-name-input"  value="${esc(e.name  || '')}" placeholder="Name" oninput="markDirty()" />
+        </div>
+        <button class="btn-delete" onclick="deleteItem(this)" title="Delete">✕</button>
+      </li>`;
+  }
+
+  // ── Add / Delete ─────────────────────────────────────────────────────────
+
+  function addItem(btn) {
+    const list = btn.closest('.column').querySelector('.item-list');
+    const tmp = document.createElement('div');
+    tmp.innerHTML = itemHTML();
+    const li = tmp.firstElementChild;
+    li.classList.add('new-item');
+    list.appendChild(li);
+    li.querySelector('.item-title-input').focus();
+    updateCount(list);
+    markDirty();
+    setTimeout(() => li.classList.remove('new-item'), 800);
+  }
+
+  function deleteItem(btn) {
+    const item = btn.closest('.item');
+    const list = item.closest('.item-list');
+    item.remove();
+    updateCount(list);
+    markDirty();
+  }
+
+  function updateCount(list) {
+    const col = list.closest('.column');
+    const ci = [...document.querySelectorAll('.column')].indexOf(col);
+    const el = document.getElementById(`count-${ci}`);
+    if (el) el.textContent = list.querySelectorAll('.item').length;
+  }
+
+  // ── Drag & Drop ──────────────────────────────────────────────────────────
+
+  function onDragStart(e) {
+    dragSrc = e.currentTarget;
+    dragSrc.classList.add('dragging');
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', '');
+  }
+  function onDragEnd() {
+    document.querySelectorAll('.item').forEach(el => el.classList.remove('dragging', 'drag-over'));
+    dragSrc = null;
+  }
+  function onDragOver(e) {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    const target = e.target.closest('.item');
+    document.querySelectorAll('.item').forEach(el => el.classList.remove('drag-over'));
+    if (target && target !== dragSrc) target.classList.add('drag-over');
+  }
+  function onDrop(e) {
+    e.preventDefault();
+    const target = e.target.closest('.item');
+    if (!dragSrc || !target || dragSrc === target) return;
+    const list = target.parentElement;
+    const items = [...list.querySelectorAll('.item')];
+    const si = items.indexOf(dragSrc), ti = items.indexOf(target);
+    list.insertBefore(dragSrc, si < ti ? target.nextSibling : target);
+    document.querySelectorAll('.item').forEach(el => el.classList.remove('drag-over'));
+    markDirty();
+  }
+
+  // ── Collect data from DOM ────────────────────────────────────────────────
+
+  function collectData() {
+    return {
+      categories: [...document.querySelectorAll('.column')].map(col => ({
+        name: col.querySelector('.col-name-input').value.trim(),
+        icon: col.dataset.icon,
+        endorsements: [...col.querySelectorAll('.item')].map(item => ({
+          title: item.querySelector('.item-title-input').value.trim(),
+          name:  item.querySelector('.item-name-input').value.trim(),
+        })).filter(e => e.title || e.name),
+      })),
+    };
+  }
+
+  // ── Dirty state ──────────────────────────────────────────────────────────
+
+  function markDirty() {
+    dirty = true;
+    document.getElementById('unsavedBadge').classList.add('visible');
+  }
+  function clearDirty() {
+    dirty = false;
+    document.getElementById('unsavedBadge').classList.remove('visible');
+  }
+  window.addEventListener('beforeunload', e => { if (dirty) { e.preventDefault(); e.returnValue = ''; } });
+
+  // ── Toast ────────────────────────────────────────────────────────────────
+
+  let toastTimer;
+  function showToast(msg, isError = false) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = 'toast' + (isError ? ' error' : '');
+    clearTimeout(toastTimer);
+    requestAnimationFrame(() => requestAnimationFrame(() => t.classList.add('show')));
+    toastTimer = setTimeout(() => t.classList.remove('show'), 3000);
+  }
+
+  // ── Util ─────────────────────────────────────────────────────────────────
+
+  function esc(str) {
+    return String(str).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+</script>
+</body>
+</html>
