@@ -230,8 +230,8 @@
     FILES.endorsements.sha = endMeta.sha;
     FILES.about.sha        = aboutMeta.sha;
 
-    renderEndorsements(JSON.parse(atob(endMeta.content.replace(/\n/g, ''))));
-    renderAbout(JSON.parse(atob(aboutMeta.content.replace(/\n/g, ''))));
+    renderEndorsements(JSON.parse(b64decode(endMeta.content)));
+    renderAbout(JSON.parse(b64decode(aboutMeta.content)));
 
     document.getElementById('tokenScreen').style.display = 'none';
     document.getElementById('main').style.display        = 'block';
@@ -497,6 +497,12 @@
   }
 
   // ── Util ──────────────────────────────────────────────────────────────────
+
+  function b64decode(str) {
+    const binary = atob(str.replace(/\n/g, ''));
+    const bytes = Uint8Array.from(binary, c => c.charCodeAt(0));
+    return new TextDecoder().decode(bytes);
+  }
 
   function esc(s) {
     return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
