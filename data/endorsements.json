@@ -2,15 +2,15 @@
   "categories": [
     {
       "name": "Elected officers",
-      "icon": "â",
+      "icon": "Ã¢ÂÂ",
       "endorsements": [
-        {
-          "title": "Cool Kid",
-          "name": "Robel Kuzmanich"
-        },
         {
           "title": "Concord City Councilmember",
           "name": "Dominic Aliano"
+        },
+        {
+          "title": "Cool Kid",
+          "name": "Robel Kuzmanich"
         },
         {
           "title": "Concord City Councilmember",
@@ -92,7 +92,7 @@
     },
     {
       "name": "Law Enforcement",
-      "icon": "â",
+      "icon": "Ã¢ÂÂ",
       "endorsements": [
         {
           "title": "Contra Costa Deputy Sheriffs Association",
@@ -178,7 +178,7 @@
     },
     {
       "name": "Community",
-      "icon": "â¥",
+      "icon": "Ã¢ÂÂ¥",
       "endorsements": [
         {
           "title": "Small Business Owner",
