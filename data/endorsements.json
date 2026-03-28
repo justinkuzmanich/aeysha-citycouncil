@@ -1,81 +1,265 @@
 {
   "categories": [
     {
-      "name": "Elected Officials",
-      "icon": "★",
+      "name": "Elected officers",
+      "icon": "â",
       "endorsements": [
-        { "title": "Concord City Councilmember", "name": "Dominic Aliano" },
-        { "title": "Concord City Councilmember", "name": "Pablo Benavente" },
-        { "title": "Concord City Councilmember", "name": "Laura Hoffmeister" },
-        { "title": "Contra Costa County Supervisor", "name": "Ken Carlson" },
-        { "title": "State Assemblymember", "name": "Maria Chen" },
-        { "title": "State Senator", "name": "David Okafor" },
-        { "title": "Mayor, City of Concord", "name": "James Reyes" },
-        { "title": "County Board of Education Member", "name": "Patricia Nguyen" },
-        { "title": "School Board Trustee", "name": "Robert Castillo" },
-        { "title": "City Council Candidate", "name": "Angela Torres" },
-        { "title": "Former Mayor, City of Concord", "name": "Michael Washington" },
-        { "title": "Contra Costa Water District Director", "name": "Sandra Kim" },
-        { "title": "BART Board Director", "name": "Thomas Rivera" },
-        { "title": "Harbor Commissioner", "name": "Diane Patel" },
-        { "title": "Parks & Recreation Commissioner", "name": "Gregory Lawson" },
-        { "title": "Planning Commissioner", "name": "Veronica Mills" },
-        { "title": "Concord City Councilmember", "name": "Steven Park" },
-        { "title": "County Democratic Party Chair", "name": "Rachel Thornton" },
-        { "title": "Democratic Club President", "name": "Marcus Johnson" },
-        { "title": "Former County Supervisor", "name": "Linda Espinoza" }
+        {
+          "title": "Cool Kid",
+          "name": "Robel Kuzmanich"
+        },
+        {
+          "title": "Concord City Councilmember",
+          "name": "Dominic Aliano"
+        },
+        {
+          "title": "Concord City Councilmember",
+          "name": "Pablo Benavente"
+        },
+        {
+          "title": "Concord City Councilmember",
+          "name": "Laura Hoffmeister"
+        },
+        {
+          "title": "Contra Costa County Supervisor",
+          "name": "Ken Carlson"
+        },
+        {
+          "title": "State Assemblymember",
+          "name": "Maria Chen"
+        },
+        {
+          "title": "State Senator",
+          "name": "David Okafor"
+        },
+        {
+          "title": "Mayor, City of Concord",
+          "name": "James Reyes"
+        },
+        {
+          "title": "County Board of Education Member",
+          "name": "Patricia Nguyen"
+        },
+        {
+          "title": "School Board Trustee",
+          "name": "Robert Castillo"
+        },
+        {
+          "title": "City Council Candidate",
+          "name": "Angela Torres"
+        },
+        {
+          "title": "Former Mayor, City of Concord",
+          "name": "Michael Washington"
+        },
+        {
+          "title": "Contra Costa Water District Director",
+          "name": "Sandra Kim"
+        },
+        {
+          "title": "BART Board Director",
+          "name": "Thomas Rivera"
+        },
+        {
+          "title": "Harbor Commissioner",
+          "name": "Diane Patel"
+        },
+        {
+          "title": "Parks & Recreation Commissioner",
+          "name": "Gregory Lawson"
+        },
+        {
+          "title": "Planning Commissioner",
+          "name": "Veronica Mills"
+        },
+        {
+          "title": "Concord City Councilmember",
+          "name": "Steven Park"
+        },
+        {
+          "title": "County Democratic Party Chair",
+          "name": "Rachel Thornton"
+        },
+        {
+          "title": "Democratic Club President",
+          "name": "Marcus Johnson"
+        },
+        {
+          "title": "Former County Supervisor",
+          "name": "Linda Espinoza"
+        }
       ]
     },
     {
       "name": "Law Enforcement",
-      "icon": "⚖",
+      "icon": "â",
       "endorsements": [
-        { "title": "Contra Costa Deputy Sheriffs Association", "name": "Official Endorsement" },
-        { "title": "Concord Police Officers Association", "name": "Official Endorsement" },
-        { "title": "Sheriff, Contra Costa County", "name": "Frank Delgado" },
-        { "title": "Chief of Police, Concord PD", "name": "Carlos Medina" },
-        { "title": "Deputy Sheriff", "name": "Anthony Bell" },
-        { "title": "Deputy Sheriff", "name": "Kevin Nakamura" },
-        { "title": "Deputy Sheriff", "name": "Brian Walsh" },
-        { "title": "Police Officer", "name": "Denise Morales" },
-        { "title": "Police Sergeant", "name": "Raymond Scott" },
-        { "title": "Police Lieutenant", "name": "Jason Burke" },
-        { "title": "Fire Captain, Contra Costa Fire", "name": "Stephanie Gaines" },
-        { "title": "Firefighter", "name": "Harold Simmons" },
-        { "title": "Firefighter", "name": "Monica Reyes" },
-        { "title": "Retired Deputy Sheriff", "name": "Terrence Young" },
-        { "title": "Retired Chief of Police", "name": "Elaine Foster" },
-        { "title": "Police Corporal", "name": "Nathan Cruz" },
-        { "title": "Probation Officer", "name": "Carla Bennett" },
-        { "title": "District Attorney Investigator", "name": "Olivia Freeman" },
-        { "title": "Animal Services Officer", "name": "Jasmine Cooper" },
-        { "title": "Code Enforcement Officer", "name": "William Hart" }
+        {
+          "title": "Contra Costa Deputy Sheriffs Association",
+          "name": "Official Endorsement"
+        },
+        {
+          "title": "Concord Police Officers Association",
+          "name": "Official Endorsement"
+        },
+        {
+          "title": "Sheriff, Contra Costa County",
+          "name": "Frank Delgado"
+        },
+        {
+          "title": "Chief of Police, Concord PD",
+          "name": "Carlos Medina"
+        },
+        {
+          "title": "Deputy Sheriff",
+          "name": "Anthony Bell"
+        },
+        {
+          "title": "Deputy Sheriff",
+          "name": "Kevin Nakamura"
+        },
+        {
+          "title": "Deputy Sheriff",
+          "name": "Brian Walsh"
+        },
+        {
+          "title": "Police Officer",
+          "name": "Denise Morales"
+        },
+        {
+          "title": "Police Sergeant",
+          "name": "Raymond Scott"
+        },
+        {
+          "title": "Police Lieutenant",
+          "name": "Jason Burke"
+        },
+        {
+          "title": "Fire Captain, Contra Costa Fire",
+          "name": "Stephanie Gaines"
+        },
+        {
+          "title": "Firefighter",
+          "name": "Harold Simmons"
+        },
+        {
+          "title": "Firefighter",
+          "name": "Monica Reyes"
+        },
+        {
+          "title": "Retired Deputy Sheriff",
+          "name": "Terrence Young"
+        },
+        {
+          "title": "Retired Chief of Police",
+          "name": "Elaine Foster"
+        },
+        {
+          "title": "Police Corporal",
+          "name": "Nathan Cruz"
+        },
+        {
+          "title": "Probation Officer",
+          "name": "Carla Bennett"
+        },
+        {
+          "title": "District Attorney Investigator",
+          "name": "Olivia Freeman"
+        },
+        {
+          "title": "Animal Services Officer",
+          "name": "Jasmine Cooper"
+        },
+        {
+          "title": "Code Enforcement Officer",
+          "name": "William Hart"
+        }
       ]
     },
     {
       "name": "Community",
-      "icon": "♥",
+      "icon": "â¥",
       "endorsements": [
-        { "title": "Small Business Owner", "name": "Grace Yamamoto" },
-        { "title": "Concord Community Institute Graduate", "name": "Samuel Brooks" },
-        { "title": "PTA President, Concord USD", "name": "Pastor Jerome Ellis" },
-        { "title": "Executive Director, Cancer Support Community", "name": "Tina Sandoval" },
-        { "title": "John Muir Health Fund Board Member", "name": "Marcus Huang" },
-        { "title": "Neighborhood Council Chair", "name": "Pamela Dixon" },
-        { "title": "Faith Community Leader", "name": "Alicia Winters" },
-        { "title": "Local Business Owner", "name": "Derek Owens" },
-        { "title": "Realtor, Concord", "name": "Cheryl Ramsey" },
-        { "title": "Teacher, Concord USD", "name": "Howard Perkins" },
-        { "title": "Registered Nurse", "name": "Ronald Hayes" },
-        { "title": "Social Worker", "name": "Tony Garza" },
-        { "title": "Nonprofit Executive Director", "name": "Barbara Stein" },
-        { "title": "Retired Educator", "name": "Phil Nguyen" },
-        { "title": "Veterans Advocate", "name": "Laura Jennings" },
-        { "title": "Youth Sports Coach", "name": "Darnell Gibson" },
-        { "title": "Senior Center Volunteer", "name": "Small Business Owner" },
-        { "title": "Chamber of Commerce Member", "name": "Phil Nguyen" },
-        { "title": "Environmental Advocate", "name": "Laura Jennings" },
-        { "title": "Community Organizer", "name": "Darnell Gibson" }
+        {
+          "title": "Small Business Owner",
+          "name": "Grace Yamamoto"
+        },
+        {
+          "title": "Concord Community Institute Graduate",
+          "name": "Samuel Brooks"
+        },
+        {
+          "title": "PTA President, Concord USD",
+          "name": "Pastor Jerome Ellis"
+        },
+        {
+          "title": "Executive Director, Cancer Support Community",
+          "name": "Tina Sandoval"
+        },
+        {
+          "title": "John Muir Health Fund Board Member",
+          "name": "Marcus Huang"
+        },
+        {
+          "title": "Neighborhood Council Chair",
+          "name": "Pamela Dixon"
+        },
+        {
+          "title": "Faith Community Leader",
+          "name": "Alicia Winters"
+        },
+        {
+          "title": "Local Business Owner",
+          "name": "Derek Owens"
+        },
+        {
+          "title": "Realtor, Concord",
+          "name": "Cheryl Ramsey"
+        },
+        {
+          "title": "Teacher, Concord USD",
+          "name": "Howard Perkins"
+        },
+        {
+          "title": "Registered Nurse",
+          "name": "Ronald Hayes"
+        },
+        {
+          "title": "Social Worker",
+          "name": "Tony Garza"
+        },
+        {
+          "title": "Nonprofit Executive Director",
+          "name": "Barbara Stein"
+        },
+        {
+          "title": "Retired Educator",
+          "name": "Phil Nguyen"
+        },
+        {
+          "title": "Veterans Advocate",
+          "name": "Laura Jennings"
+        },
+        {
+          "title": "Youth Sports Coach",
+          "name": "Darnell Gibson"
+        },
+        {
+          "title": "Senior Center Volunteer",
+          "name": "Small Business Owner"
+        },
+        {
+          "title": "Chamber of Commerce Member",
+          "name": "Phil Nguyen"
+        },
+        {
+          "title": "Environmental Advocate",
+          "name": "Laura Jennings"
+        },
+        {
+          "title": "Community Organizer",
+          "name": "Darnell Gibson"
+        }
       ]
     }
   ]
