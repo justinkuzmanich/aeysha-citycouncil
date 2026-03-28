@@ -126,7 +126,7 @@
     <div class="header-right">
       <span class="unsaved-badge" id="unsavedBadge"><span class="unsaved-dot"></span> Unsaved changes</span>
       <a href="index.html" target="_blank" class="btn-hdr">Preview Site ↗</a>
-      <button class="btn-hdr" onclick="clearToken()" id="tokenBtn" style="display:none">⚙ Token</button>
+      <button class="btn-hdr" onclick="logout()" id="logoutBtn" style="display:none">Log Out</button>
       <button class="btn-save" id="saveBtn" onclick="saveAndDeploy()" style="display:none">Save &amp; Deploy</button>
     </div>
   </div>
@@ -138,22 +138,16 @@
   </div>
 </header>
 
-<!-- Token setup screen -->
+<!-- Password screen -->
 <div id="tokenScreen">
-  <div class="setup-icon">🔑</div>
-  <h1 class="setup-h">Connect to GitHub</h1>
-  <p class="setup-sub">Enter a GitHub personal access token to save changes directly to the repo. Netlify will redeploy automatically.</p>
+  <div class="setup-icon">🔒</div>
+  <h1 class="setup-h">Admin Login</h1>
+  <p class="setup-sub">Enter the admin password to access the CMS.</p>
   <div class="token-box">
-    <input class="token-input" id="tokenInput" type="password" placeholder="github_pat_..." onkeydown="if(event.key==='Enter')connect()" />
-    <button class="btn-connect" onclick="connect()">Connect</button>
+    <input class="token-input" id="tokenInput" type="password" placeholder="Password" onkeydown="if(event.key==='Enter')connect()" />
+    <button class="btn-connect" onclick="connect()">Log In</button>
   </div>
   <p class="token-error" id="tokenError"></p>
-  <p class="setup-hint">
-    <a href="https://github.com/settings/personal-access-tokens/new" target="_blank">Create a fine-grained token →</a><br>
-    Set <strong>Repository access</strong> to <code>aeysha-citycouncil</code> only.<br>
-    Under <strong>Permissions → Contents</strong>, choose <code>Read and write</code>.<br>
-    Your token is stored only in this browser.
-  </p>
 </div>
 
 <!-- CMS panels -->
@@ -190,7 +184,9 @@
 <div class="toast" id="toast"></div>
 
 <script>
-  const REPO = 'justinkuzmanich/aeysha-citycouncil';
+  const REPO     = 'justinkuzmanich/aeysha-citycouncil';
+  const GH_TOKEN = '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';
+  const PASSWORD = 'accc2026';
   const FILES = {
     endorsements: { path: 'data/endorsements.json', sha: null },
     about:        { path: 'data/about.json',         sha: null },
@@ -202,30 +198,35 @@
 
   // ── Boot ─────────────────────────────────────────────────────────────────
 
-  const savedToken = localStorage.getItem('gh_token');
-  if (savedToken) loadCMS(savedToken);
+  if (sessionStorage.getItem('cms_auth') === '1') loadCMS();
 
   async function connect() {
-    const token = document.getElementById('tokenInput').value.trim();
-    if (!token) return;
+    const pw = document.getElementById('tokenInput').value.trim();
+    if (!pw) return;
     const err = document.getElementById('tokenError');
     err.classList.remove('visible');
-    document.querySelector('.btn-connect').textContent = 'Connecting…';
-    try {
-      await loadCMS(token);
-      localStorage.setItem('gh_token', token);
-    } catch {
-      err.textContent = 'Could not connect. Check your token and try again.';
+    if (pw !== PASSWORD) {
+      err.textContent = 'Incorrect password. Please try again.';
       err.classList.add('visible');
-      document.querySelector('.btn-connect').textContent = 'Connect';
+      document.getElementById('tokenInput').value = '';
+      return;
+    }
+    sessionStorage.setItem('cms_auth', '1');
+    document.querySelector('.btn-connect').textContent = 'Loading…';
+    try {
+      await loadCMS();
+    } catch {
+      err.textContent = 'Could not load content. Please try again.';
+      err.classList.add('visible');
+      document.querySelector('.btn-connect').textContent = 'Log In';
     }
   }
 
-  async function loadCMS(token) {
+  async function loadCMS() {
     // Load both files in parallel
     const [endMeta, aboutMeta] = await Promise.all([
-      ghFetch(FILES.endorsements.path, token),
-      ghFetch(FILES.about.path, token),
+      ghFetch(FILES.endorsements.path),
+      ghFetch(FILES.about.path),
     ]);
     FILES.endorsements.sha = endMeta.sha;
     FILES.about.sha        = aboutMeta.sha;
@@ -237,22 +238,20 @@
     document.getElementById('main').style.display        = 'block';
     document.getElementById('tabBar').style.display      = 'block';
     document.getElementById('saveBtn').style.display     = 'inline-block';
-    document.getElementById('tokenBtn').style.display    = 'inline-block';
+    document.getElementById('logoutBtn').style.display   = 'inline-block';
     clearDirty();
   }
 
-  async function ghFetch(path, token) {
-    const t = token || localStorage.getItem('gh_token');
+  async function ghFetch(path) {
     const res = await fetch(`https://api.github.com/repos/${REPO}/contents/${path}`, {
-      headers: { Authorization: `Bearer ${t}`, Accept: 'application/vnd.github+json' }
+      headers: { Authorization: `Bearer ${GH_TOKEN}`, Accept: 'application/vnd.github+json' }
     });
     if (!res.ok) throw new Error(res.status);
     return res.json();
   }
 
-  function clearToken() {
-    if (!confirm('Disconnect and clear your saved token?')) return;
-    localStorage.removeItem('gh_token');
+  function logout() {
+    sessionStorage.removeItem('cms_auth');
     location.reload();
   }
 
@@ -373,8 +372,7 @@
   // ── Save & Deploy ─────────────────────────────────────────────────────────
 
   async function saveAndDeploy() {
-    const token = localStorage.getItem('gh_token');
-    if (!token) { showToast('No token saved.', 'error'); return; }
+    if (sessionStorage.getItem('cms_auth') !== '1') { showToast('Not logged in.', 'error'); return; }
 
     const btn = document.getElementById('saveBtn');
     btn.disabled = true;
@@ -390,7 +388,7 @@
       const res = await fetch(`https://api.github.com/repos/${REPO}/contents/${file.path}`, {
         method: 'PUT',
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${GH_TOKEN}`,
           Accept: 'application/vnd.github+json',
           'Content-Type': 'application/json',
         },
