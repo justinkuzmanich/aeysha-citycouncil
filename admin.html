@@ -3,43 +3,49 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Endorsements Admin — Corio for Concord</title>
+  <title>CMS Admin — Corio for Concord</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
       --navy: #1b3060; --blue: #5aace0; --sky: #a8d4f0;
-      --white: #ffffff; --bg: #f2f6fb; --border: #d0e2f0;
+      --white: #fff; --bg: #f2f6fb; --border: #d0e2f0;
       --text: #1a2a3a; --muted: #6b8aaa; --red: #d94040; --green: #2a9d6b;
     }
     body { font-family: 'Barlow', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
 
     /* ── HEADER ── */
-    header { background: var(--navy); color: var(--white); position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 12px rgba(0,0,0,0.25); }
+    header { background: var(--navy); position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 12px rgba(0,0,0,0.25); }
     .header-inner { max-width: 1400px; margin: 0 auto; padding: 0 24px; height: 60px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
-    .header-left { display: flex; align-items: center; gap: 12px; }
     .brand { font-family: 'Barlow Condensed', sans-serif; font-size: 16px; font-weight: 700; letter-spacing: 0.08em; color: var(--sky); }
-    .page-title { font-size: 13px; color: rgba(255,255,255,0.55); padding-left: 12px; border-left: 1px solid rgba(255,255,255,0.2); }
+    .page-title { font-size: 13px; color: rgba(255,255,255,0.5); padding-left: 12px; border-left: 1px solid rgba(255,255,255,0.2); }
     .header-right { display: flex; align-items: center; gap: 10px; }
     .unsaved-badge { font-size: 12px; font-weight: 600; color: #ffc842; display: none; align-items: center; gap: 5px; }
     .unsaved-badge.visible { display: flex; }
     .unsaved-dot { width: 7px; height: 7px; border-radius: 50%; background: #ffc842; }
     .btn-hdr { font-family: 'Barlow', sans-serif; font-size: 13px; font-weight: 600; background: none; color: rgba(255,255,255,0.7); border: 1px solid rgba(255,255,255,0.2); border-radius: 4px; padding: 6px 14px; cursor: pointer; transition: all 0.15s; text-decoration: none; }
-    .btn-hdr:hover { color: var(--white); border-color: rgba(255,255,255,0.5); }
-    .btn-save { font-family: 'Barlow', sans-serif; font-size: 13px; font-weight: 700; background: var(--blue); color: var(--white); border: none; padding: 8px 20px; border-radius: 4px; cursor: pointer; transition: background 0.15s; }
+    .btn-hdr:hover { color: #fff; border-color: rgba(255,255,255,0.5); }
+    .btn-save { font-family: 'Barlow', sans-serif; font-size: 13px; font-weight: 700; background: var(--blue); color: #fff; border: none; padding: 8px 20px; border-radius: 4px; cursor: pointer; transition: background 0.15s; }
     .btn-save:hover:not(:disabled) { background: #4a9dd0; }
     .btn-save:disabled { background: var(--muted); cursor: default; }
 
-    /* ── TOKEN SETUP SCREEN ── */
-    #tokenScreen { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: calc(100vh - 60px); gap: 16px; padding: 40px; text-align: center; }
+    /* ── TABS ── */
+    .tab-bar { background: rgba(0,0,0,0.25); }
+    .tab-bar-inner { max-width: 1400px; margin: 0 auto; padding: 0 24px; display: flex; gap: 4px; }
+    .tab { font-family: 'Barlow', sans-serif; font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: rgba(255,255,255,0.5); background: none; border: none; padding: 10px 16px; cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.15s; }
+    .tab.active { color: var(--sky); border-bottom-color: var(--sky); }
+    .tab:hover:not(.active) { color: rgba(255,255,255,0.8); }
+
+    /* ── TOKEN SETUP ── */
+    #tokenScreen { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: calc(100vh - 88px); gap: 16px; padding: 40px; text-align: center; }
     .setup-icon { font-size: 40px; margin-bottom: 4px; }
     .setup-h { font-family: 'Barlow Condensed', sans-serif; font-size: 26px; font-weight: 700; color: var(--navy); }
     .setup-sub { font-size: 14px; color: var(--muted); max-width: 420px; line-height: 1.6; }
     .token-box { display: flex; gap: 8px; width: 100%; max-width: 480px; margin-top: 4px; }
     .token-input { flex: 1; font-family: 'Barlow', sans-serif; font-size: 13px; padding: 10px 14px; border: 1px solid var(--border); border-radius: 4px; outline: none; color: var(--text); }
     .token-input:focus { border-color: var(--blue); }
-    .btn-connect { font-family: 'Barlow', sans-serif; font-size: 13px; font-weight: 700; background: var(--navy); color: var(--white); border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; white-space: nowrap; }
+    .btn-connect { font-family: 'Barlow', sans-serif; font-size: 13px; font-weight: 700; background: var(--navy); color: #fff; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; white-space: nowrap; }
     .btn-connect:hover { background: #24407a; }
     .setup-hint { font-size: 12px; color: var(--muted); max-width: 420px; line-height: 1.7; }
     .setup-hint a { color: var(--blue); }
@@ -49,18 +55,22 @@
 
     /* ── MAIN ── */
     main { max-width: 1400px; margin: 0 auto; padding: 32px 24px 64px; display: none; }
+
+    /* ── DEPLOY BANNER ── */
+    .deploy-banner { background: #eaf7f1; border: 1px solid #a3ddc0; border-radius: 6px; padding: 14px 20px; margin-bottom: 24px; font-size: 13px; color: #1a5c3a; display: none; align-items: center; gap: 10px; }
+    .deploy-banner.visible { display: flex; }
+    .deploy-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); animation: pulse 1.5s infinite; flex-shrink: 0; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+    /* ── ENDORSEMENTS GRID ── */
     .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; align-items: start; }
     @media (max-width: 960px) { .grid { grid-template-columns: 1fr; } }
-
-    /* ── COLUMN CARD ── */
-    .column { background: var(--white); border-radius: 8px; border: 1px solid var(--border); overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+    .column { background: #fff; border-radius: 8px; border: 1px solid var(--border); overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
     .col-header { background: var(--navy); padding: 16px 20px; display: flex; align-items: center; gap: 12px; }
     .col-icon { font-size: 18px; color: var(--sky); flex-shrink: 0; }
-    .col-name-input { font-family: 'Barlow Condensed', sans-serif; font-size: 17px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--white); background: transparent; border: none; border-bottom: 1px solid transparent; outline: none; width: 100%; padding: 2px 0; transition: border-color 0.15s; }
+    .col-name-input { font-family: 'Barlow Condensed', sans-serif; font-size: 17px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #fff; background: transparent; border: none; border-bottom: 1px solid transparent; outline: none; width: 100%; padding: 2px 0; transition: border-color 0.15s; }
     .col-name-input:hover, .col-name-input:focus { border-bottom-color: var(--sky); }
     .col-count { font-size: 12px; color: rgba(255,255,255,0.45); flex-shrink: 0; white-space: nowrap; }
-
-    /* ── ITEMS ── */
     .item-list { list-style: none; padding: 8px 0; min-height: 48px; }
     .item { display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-bottom: 1px solid var(--border); }
     .item:last-child { border-bottom: none; }
@@ -80,14 +90,26 @@
     .btn-add { font-family: 'Barlow', sans-serif; font-size: 13px; font-weight: 600; color: var(--blue); background: none; border: 1px dashed var(--sky); border-radius: 4px; width: 100%; padding: 8px; cursor: pointer; transition: all 0.15s; }
     .btn-add:hover { background: #edf6fd; border-color: var(--blue); }
 
-    /* ── DEPLOY BANNER ── */
-    .deploy-banner { background: #eaf7f1; border: 1px solid #a3ddc0; border-radius: 6px; padding: 14px 20px; margin-bottom: 24px; font-size: 13px; color: #1a5c3a; display: none; align-items: center; gap: 10px; }
-    .deploy-banner.visible { display: flex; }
-    .deploy-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); animation: pulse 1.5s infinite; flex-shrink: 0; }
-    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+    /* ── ABOUT EDITOR ── */
+    #aboutPanel { display: none; }
+    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start; }
+    @media (max-width: 900px) { .about-grid { grid-template-columns: 1fr; } }
+    .about-section-label { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin: 32px 0 12px; display: block; }
+    .about-card { background: #fff; border-radius: 8px; border: 1px solid var(--border); overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+    .about-card-header { background: var(--navy); padding: 12px 18px; }
+    .about-card-title { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.5); }
+    .about-card-body { padding: 16px 18px; display: flex; flex-direction: column; gap: 14px; }
+    .field-group { display: flex; flex-direction: column; gap: 4px; }
+    .field-label { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+    .field-input { font-family: 'Barlow', sans-serif; font-size: 13px; font-weight: 600; color: var(--text); border: 1px solid var(--border); border-radius: 4px; padding: 7px 10px; outline: none; width: 100%; transition: border-color 0.15s; }
+    .field-input:focus { border-color: var(--blue); }
+    .field-textarea { font-family: 'Barlow', sans-serif; font-size: 13px; font-weight: 400; color: var(--text); border: 1px solid var(--border); border-radius: 4px; padding: 8px 10px; outline: none; width: 100%; resize: vertical; min-height: 90px; line-height: 1.6; transition: border-color 0.15s; }
+    .field-textarea:focus { border-color: var(--blue); }
+    .cred-cards-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    @media (max-width: 900px) { .cred-cards-grid { grid-template-columns: 1fr; } }
 
     /* ── TOAST ── */
-    .toast { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(12px); background: var(--navy); color: var(--white); font-size: 13px; font-weight: 600; padding: 10px 24px; border-radius: 6px; opacity: 0; transition: opacity 0.2s, transform 0.2s; pointer-events: none; white-space: nowrap; z-index: 200; }
+    .toast { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(12px); background: var(--navy); color: #fff; font-size: 13px; font-weight: 600; padding: 10px 24px; border-radius: 6px; opacity: 0; transition: opacity 0.2s, transform 0.2s; pointer-events: none; white-space: nowrap; z-index: 200; }
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
     .toast.error { background: var(--red); }
     .toast.success { background: var(--green); }
@@ -97,15 +119,21 @@
 
 <header>
   <div class="header-inner">
-    <div class="header-left">
+    <div style="display:flex;align-items:center;gap:12px;">
       <span class="brand">CORIO FOR CONCORD</span>
-      <span class="page-title">Endorsements Admin</span>
+      <span class="page-title">CMS Admin</span>
     </div>
     <div class="header-right">
       <span class="unsaved-badge" id="unsavedBadge"><span class="unsaved-dot"></span> Unsaved changes</span>
       <a href="index.html" target="_blank" class="btn-hdr">Preview Site ↗</a>
       <button class="btn-hdr" onclick="clearToken()" id="tokenBtn" style="display:none">⚙ Token</button>
       <button class="btn-save" id="saveBtn" onclick="saveAndDeploy()" style="display:none">Save &amp; Deploy</button>
+    </div>
+  </div>
+  <div class="tab-bar" id="tabBar" style="display:none">
+    <div class="tab-bar-inner">
+      <button class="tab active" onclick="switchTab('endorsements')">Endorsements</button>
+      <button class="tab" onclick="switchTab('about')">About Page</button>
     </div>
   </div>
 </header>
@@ -128,25 +156,49 @@
   </p>
 </div>
 
-<!-- CMS panel -->
+<!-- CMS panels -->
 <main id="main">
   <div class="deploy-banner" id="deployBanner">
     <span class="deploy-dot"></span>
     <span>Deploying to Netlify — changes will be live in about 1 minute.</span>
   </div>
-  <div class="grid" id="grid"></div>
+
+  <!-- Endorsements -->
+  <div id="endorsementsPanel">
+    <div class="grid" id="grid"></div>
+  </div>
+
+  <!-- About Page -->
+  <div id="aboutPanel">
+    <span class="about-section-label">Bio Sections</span>
+    <div class="about-grid" id="bioGrid"></div>
+
+    <span class="about-section-label">Credentials</span>
+    <div class="about-card" style="margin-bottom:8px;">
+      <div class="about-card-header"><span class="about-card-title">Section Eyebrow</span></div>
+      <div class="about-card-body">
+        <div class="field-group">
+          <label class="field-label">Eyebrow Text</label>
+          <input class="field-input" id="credEyebrow" oninput="markDirty()" />
+        </div>
+      </div>
+    </div>
+    <div class="cred-cards-grid" id="credGrid"></div>
+  </div>
 </main>
 
 <div class="toast" id="toast"></div>
 
 <script>
-  const REPO  = 'justinkuzmanich/aeysha-citycouncil';
-  const FILE  = 'data/endorsements.json';
-  const API   = `https://api.github.com/repos/${REPO}/contents/${FILE}`;
+  const REPO = 'justinkuzmanich/aeysha-citycouncil';
+  const FILES = {
+    endorsements: { path: 'data/endorsements.json', sha: null },
+    about:        { path: 'data/about.json',         sha: null },
+  };
 
-  let fileSha  = null;
-  let dirty    = false;
-  let dragSrc  = null;
+  let activeTab = 'endorsements';
+  let dirty     = false;
+  let dragSrc   = null;
 
   // ── Boot ─────────────────────────────────────────────────────────────────
 
@@ -162,7 +214,7 @@
     try {
       await loadCMS(token);
       localStorage.setItem('gh_token', token);
-    } catch (e) {
+    } catch {
       err.textContent = 'Could not connect. Check your token and try again.';
       err.classList.add('visible');
       document.querySelector('.btn-connect').textContent = 'Connect';
@@ -170,22 +222,32 @@
   }
 
   async function loadCMS(token) {
-    // Fetch file metadata + content from GitHub
-    const res = await fetch(API, {
-      headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json' }
+    // Load both files in parallel
+    const [endMeta, aboutMeta] = await Promise.all([
+      ghFetch(FILES.endorsements.path, token),
+      ghFetch(FILES.about.path, token),
+    ]);
+    FILES.endorsements.sha = endMeta.sha;
+    FILES.about.sha        = aboutMeta.sha;
+
+    renderEndorsements(JSON.parse(atob(endMeta.content.replace(/\n/g, ''))));
+    renderAbout(JSON.parse(atob(aboutMeta.content.replace(/\n/g, ''))));
+
+    document.getElementById('tokenScreen').style.display = 'none';
+    document.getElementById('main').style.display        = 'block';
+    document.getElementById('tabBar').style.display      = 'block';
+    document.getElementById('saveBtn').style.display     = 'inline-block';
+    document.getElementById('tokenBtn').style.display    = 'inline-block';
+    clearDirty();
+  }
+
+  async function ghFetch(path, token) {
+    const t = token || localStorage.getItem('gh_token');
+    const res = await fetch(`https://api.github.com/repos/${REPO}/contents/${path}`, {
+      headers: { Authorization: `Bearer ${t}`, Accept: 'application/vnd.github+json' }
     });
     if (!res.ok) throw new Error(res.status);
-    const meta = await res.json();
-    fileSha = meta.sha;
-    const data = JSON.parse(atob(meta.content.replace(/\n/g, '')));
-
-    render(data);
-
-    // Show CMS, hide setup
-    document.getElementById('tokenScreen').style.display = 'none';
-    document.getElementById('main').style.display = 'block';
-    document.getElementById('saveBtn').style.display = 'inline-block';
-    document.getElementById('tokenBtn').style.display = 'inline-block';
+    return res.json();
   }
 
   function clearToken() {
@@ -194,9 +256,18 @@
     location.reload();
   }
 
-  // ── Render ───────────────────────────────────────────────────────────────
+  // ── Tab switching ─────────────────────────────────────────────────────────
 
-  function render(data) {
+  function switchTab(tab) {
+    activeTab = tab;
+    document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.textContent.toLowerCase().includes(tab === 'endorsements' ? 'endorse' : 'about')));
+    document.getElementById('endorsementsPanel').style.display = tab === 'endorsements' ? 'block' : 'none';
+    document.getElementById('aboutPanel').style.display        = tab === 'about'        ? 'block' : 'none';
+  }
+
+  // ── Endorsements render ───────────────────────────────────────────────────
+
+  function renderEndorsements(data) {
     document.getElementById('grid').innerHTML = data.categories.map((cat, ci) => `
       <div class="column" data-icon="${cat.icon}">
         <div class="col-header">
@@ -210,9 +281,7 @@
         <div class="col-footer">
           <button class="btn-add" onclick="addItem(this)">+ Add Endorsement</button>
         </div>
-      </div>
-    `).join('');
-    clearDirty();
+      </div>`).join('');
   }
 
   function itemHTML(e = {}) {
@@ -227,7 +296,125 @@
       </li>`;
   }
 
-  // ── Add / Delete ─────────────────────────────────────────────────────────
+  // ── About render ──────────────────────────────────────────────────────────
+
+  const BIO_HEADINGS = [
+    "Aeysha's Story",
+    "From Curiosity to Commissioner",
+    "Making Concord Healthier",
+    "Safe Families, Safe Neighborhoods",
+  ];
+
+  function renderAbout(data) {
+    document.getElementById('bioGrid').innerHTML = data.bioSections.map((s, i) => `
+      <div class="about-card" data-bio="${i}">
+        <div class="about-card-header"><span class="about-card-title">${BIO_HEADINGS[i] || 'Section ' + (i+1)}</span></div>
+        <div class="about-card-body">
+          <div class="field-group">
+            <label class="field-label">Tag Label</label>
+            <input class="field-input bio-tag-input" value="${esc(s.tag)}" oninput="markDirty()" />
+          </div>
+          ${s.paragraphs.map((p, pi) => `
+            <div class="field-group">
+              <label class="field-label">Paragraph ${pi + 1}</label>
+              <textarea class="field-textarea bio-para-input" oninput="markDirty()">${esc(p)}</textarea>
+            </div>`).join('')}
+        </div>
+      </div>`).join('');
+
+    document.getElementById('credEyebrow').value = data.credentials.eyebrow;
+    document.getElementById('credGrid').innerHTML = data.credentials.items.map((item, i) => `
+      <div class="about-card" data-cred="${i}">
+        <div class="about-card-header"><span class="about-card-title">0${i+1}</span></div>
+        <div class="about-card-body">
+          <div class="field-group">
+            <label class="field-label">Title</label>
+            <input class="field-input cred-title-input" value="${esc(item.title)}" oninput="markDirty()" />
+          </div>
+          <div class="field-group">
+            <label class="field-label">Description</label>
+            <textarea class="field-textarea cred-desc-input" oninput="markDirty()">${esc(item.description)}</textarea>
+          </div>
+        </div>
+      </div>`).join('');
+  }
+
+  // ── Collect data ──────────────────────────────────────────────────────────
+
+  function collectEndorsements() {
+    return {
+      categories: [...document.querySelectorAll('.column')].map(col => ({
+        name: col.querySelector('.col-name-input').value.trim(),
+        icon: col.dataset.icon,
+        endorsements: [...col.querySelectorAll('.item')].map(item => ({
+          title: item.querySelector('.item-title-input').value.trim(),
+          name:  item.querySelector('.item-name-input').value.trim(),
+        })).filter(e => e.title || e.name),
+      })),
+    };
+  }
+
+  function collectAbout() {
+    return {
+      bioSections: [...document.querySelectorAll('#bioGrid .about-card')].map(card => ({
+        tag: card.querySelector('.bio-tag-input').value.trim(),
+        paragraphs: [...card.querySelectorAll('.bio-para-input')].map(t => t.value.trim()).filter(Boolean),
+      })),
+      credentials: {
+        eyebrow: document.getElementById('credEyebrow').value.trim(),
+        items: [...document.querySelectorAll('#credGrid .about-card')].map(card => ({
+          title:       card.querySelector('.cred-title-input').value.trim(),
+          description: card.querySelector('.cred-desc-input').value.trim(),
+        })),
+      },
+    };
+  }
+
+  // ── Save & Deploy ─────────────────────────────────────────────────────────
+
+  async function saveAndDeploy() {
+    const token = localStorage.getItem('gh_token');
+    if (!token) { showToast('No token saved.', 'error'); return; }
+
+    const btn = document.getElementById('saveBtn');
+    btn.disabled = true;
+    btn.textContent = 'Deploying…';
+
+    const fileKey = activeTab === 'about' ? 'about' : 'endorsements';
+    const data    = fileKey === 'about' ? collectAbout() : collectEndorsements();
+    const json    = JSON.stringify(data, null, 2);
+    const content = btoa(unescape(encodeURIComponent(json)));
+    const file    = FILES[fileKey];
+
+    try {
+      const res = await fetch(`https://api.github.com/repos/${REPO}/contents/${file.path}`, {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: 'application/vnd.github+json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message: `Update ${fileKey} via CMS admin`,
+          content,
+          sha: file.sha,
+        }),
+      });
+      if (!res.ok) throw new Error(res.status);
+      file.sha = (await res.json()).content.sha;
+      clearDirty();
+      showToast('Deployed! Live in ~1 min.', 'success');
+      document.getElementById('deployBanner').classList.add('visible');
+      setTimeout(() => document.getElementById('deployBanner').classList.remove('visible'), 90000);
+    } catch {
+      showToast('Deploy failed. Check your token.', 'error');
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Save & Deploy';
+    }
+  }
+
+  // ── Endorsements: Add / Delete / Drag ────────────────────────────────────
 
   function addItem(btn) {
     const list = btn.closest('.column').querySelector('.item-list');
@@ -257,8 +444,6 @@
     if (el) el.textContent = list.querySelectorAll('.item').length;
   }
 
-  // ── Drag & Drop ──────────────────────────────────────────────────────────
-
   function onDragStart(e) {
     dragSrc = e.currentTarget;
     dragSrc.classList.add('dragging');
@@ -287,63 +472,7 @@
     markDirty();
   }
 
-  // ── Save & Deploy ────────────────────────────────────────────────────────
-
-  function collectData() {
-    return {
-      categories: [...document.querySelectorAll('.column')].map(col => ({
-        name: col.querySelector('.col-name-input').value.trim(),
-        icon: col.dataset.icon,
-        endorsements: [...col.querySelectorAll('.item')].map(item => ({
-          title: item.querySelector('.item-title-input').value.trim(),
-          name:  item.querySelector('.item-name-input').value.trim(),
-        })).filter(e => e.title || e.name),
-      })),
-    };
-  }
-
-  async function saveAndDeploy() {
-    const token = localStorage.getItem('gh_token');
-    if (!token) { showToast('No token saved.', 'error'); return; }
-
-    const btn = document.getElementById('saveBtn');
-    btn.disabled = true;
-    btn.textContent = 'Deploying…';
-
-    const json    = JSON.stringify(collectData(), null, 2);
-    const content = btoa(unescape(encodeURIComponent(json)));
-
-    try {
-      const res = await fetch(API, {
-        method: 'PUT',
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: 'application/vnd.github+json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          message: 'Update endorsements via admin panel',
-          content,
-          sha: fileSha,
-        }),
-      });
-
-      if (!res.ok) throw new Error(res.status);
-      const result = await res.json();
-      fileSha = result.content.sha; // update sha for next save
-      clearDirty();
-      showToast('Deployed! Live in ~1 min.', 'success');
-      document.getElementById('deployBanner').classList.add('visible');
-      setTimeout(() => document.getElementById('deployBanner').classList.remove('visible'), 90000);
-    } catch {
-      showToast('Deploy failed. Check your token.', 'error');
-    } finally {
-      btn.disabled = false;
-      btn.textContent = 'Save & Deploy';
-    }
-  }
-
-  // ── Dirty state ──────────────────────────────────────────────────────────
+  // ── Dirty state ───────────────────────────────────────────────────────────
 
   function markDirty() {
     dirty = true;
@@ -355,7 +484,7 @@
   }
   window.addEventListener('beforeunload', e => { if (dirty) { e.preventDefault(); e.returnValue = ''; } });
 
-  // ── Toast ────────────────────────────────────────────────────────────────
+  // ── Toast ─────────────────────────────────────────────────────────────────
 
   let toastTimer;
   function showToast(msg, type = '') {
@@ -367,7 +496,7 @@
     toastTimer = setTimeout(() => t.classList.remove('show'), 4000);
   }
 
-  // ── Util ─────────────────────────────────────────────────────────────────
+  // ── Util ──────────────────────────────────────────────────────────────────
 
   function esc(s) {
     return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');

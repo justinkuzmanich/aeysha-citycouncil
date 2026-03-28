@@ -1965,6 +1965,27 @@
     entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
   }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
   reveals.forEach(el => observer.observe(el));
+
+  // Load copy from CMS
+  fetch('/data/about.json')
+    .then(r => r.json())
+    .then(data => {
+      const bioTags   = document.querySelectorAll('.bio-tag');
+      const bioBodies = document.querySelectorAll('.bio-body');
+      data.bioSections.forEach((s, i) => {
+        if (bioTags[i])   bioTags[i].textContent = s.tag;
+        if (bioBodies[i]) bioBodies[i].innerHTML  = s.paragraphs.map(p => `<p>${p}</p>`).join('');
+      });
+      const eyebrow = document.querySelector('.cred-eyebrow');
+      if (eyebrow) eyebrow.textContent = data.credentials.eyebrow;
+      document.querySelectorAll('.cred-card').forEach((card, i) => {
+        const item = data.credentials.items[i];
+        if (!item) return;
+        card.querySelector('.cred-title').textContent = item.title;
+        card.querySelector('.cred-desc').textContent  = item.description;
+      });
+    })
+    .catch(() => {});
 </script>
 </body>
 </html>
