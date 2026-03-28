@@ -274,6 +274,9 @@
           <input class="col-name-input" value="${esc(cat.name)}" oninput="markDirty()" />
           <span class="col-count" id="count-${ci}">${cat.endorsements.length}</span>
         </div>
+        <div class="col-footer" style="border-top:none;border-bottom:1px solid var(--border);">
+          <button class="btn-add" onclick="addItemTop(this)">+ Add Endorsement</button>
+        </div>
         <ul class="item-list" ondragover="onDragOver(event)" ondrop="onDrop(event)">
           ${cat.endorsements.map(e => itemHTML(e)).join('')}
         </ul>
@@ -421,6 +424,19 @@
     const li = tmp.firstElementChild;
     li.classList.add('new-item');
     list.appendChild(li);
+    li.querySelector('.item-title-input').focus();
+    updateCount(list);
+    markDirty();
+    setTimeout(() => li.classList.remove('new-item'), 800);
+  }
+
+  function addItemTop(btn) {
+    const list = btn.closest('.column').querySelector('.item-list');
+    const tmp = document.createElement('div');
+    tmp.innerHTML = itemHTML();
+    const li = tmp.firstElementChild;
+    li.classList.add('new-item');
+    list.prepend(li);
     li.querySelector('.item-title-input').focus();
     updateCount(list);
     markDirty();
