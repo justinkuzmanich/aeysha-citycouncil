@@ -23,6 +23,10 @@
       "icon": "★",
       "endorsements": [
         {
+          "title": "Uncle",
+          "name": "Berhe"
+        },
+        {
           "title": "Cool Kid",
           "name": "Robel Kuzmanich"
         },
@@ -109,16 +113,12 @@
       "icon": "⚖",
       "endorsements": [
         {
-          "title": "Deputy",
-          "name": "Emilio"
+          "title": "Officer",
+          "name": "Bella Kuzmanich"
         },
         {
           "title": "Contra Costa Deputy Sheriffs Association",
           "name": "Official Endorsement"
-        },
-        {
-          "title": "Officer",
-          "name": "Bella Kuzmanich"
         },
         {
           "title": "Concord Police Officers Association",
