@@ -1752,19 +1752,11 @@
     </div>
 
     <!-- ENDORSING ORGS LOGO GRID -->
-    <div class="endorse-logo-grid">
-      <div class="endorse-logo-item">
-        <img src="images/image3.webp" alt="Contra Costa Deputy Sheriffs Association">
-      </div>
-      <div class="endorse-logo-item">
-        <img src="images/image4.png" alt="California Association of Realtors">
-      </div>
-      <div class="endorse-logo-item">
-        <img src="images/image3.webp" alt="Contra Costa Deputy Sheriffs Association">
-      </div>
-      <div class="endorse-logo-item">
-        <img src="images/image4.png" alt="California Association of Realtors">
-      </div>
+    <div class="endorse-logo-grid" id="endorseLogoGrid">
+      <div class="endorse-logo-item"><img src="images/image3.webp" alt="Endorser logo"></div>
+      <div class="endorse-logo-item"><img src="images/image4.png" alt="Endorser logo"></div>
+      <div class="endorse-logo-item"><img src="images/image3.webp" alt="Endorser logo"></div>
+      <div class="endorse-logo-item"><img src="images/image4.png" alt="Endorser logo"></div>
     </div>
 
 
@@ -1800,6 +1792,16 @@
       fetch('/data/endorsements.json')
         .then(r => r.json())
         .then(data => {
+          // Render logos
+          if (data.logos) {
+            const logoItems = document.querySelectorAll('#endorseLogoGrid .endorse-logo-item img');
+            data.logos.forEach((logo, i) => {
+              if (!logoItems[i]) return;
+              logoItems[i].src = logo.src;
+              logoItems[i].alt = logo.alt;
+            });
+          }
+          // Render endorsement columns
           const cols = document.querySelectorAll('#endorsements .endorse-col');
           data.categories.forEach((cat, i) => {
             if (!cols[i]) return;
@@ -1810,7 +1812,7 @@
               ).join('');
           });
         })
-        .catch(() => {}); // silently falls back to empty lists if not served via server
+        .catch(() => {});
     </script>
 
     <div style="text-align:center; margin-top:56px; padding-bottom:8px;">

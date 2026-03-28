@@ -90,6 +90,18 @@
     .btn-add { font-family: 'Barlow', sans-serif; font-size: 13px; font-weight: 600; color: var(--blue); background: none; border: 1px dashed var(--sky); border-radius: 4px; width: 100%; padding: 8px; cursor: pointer; transition: all 0.15s; }
     .btn-add:hover { background: #edf6fd; border-color: var(--blue); }
 
+    /* ── LOGO EDITOR ── */
+    .logo-editor-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 8px; }
+    @media (max-width: 900px) { .logo-editor-grid { grid-template-columns: repeat(2, 1fr); } }
+    .logo-card { background: #fff; border-radius: 8px; border: 1px solid var(--border); overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+    .logo-card-header { background: var(--navy); padding: 10px 16px; display: flex; align-items: center; justify-content: space-between; }
+    .logo-card-title { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.5); }
+    .logo-preview { background: #1b3060; display: flex; align-items: center; justify-content: center; min-height: 110px; padding: 16px; border-bottom: 1px solid var(--border); }
+    .logo-preview img { max-height: 78px; max-width: 100%; object-fit: contain; }
+    .logo-card-body { padding: 12px 14px; display: flex; flex-direction: column; gap: 10px; }
+    .btn-upload { font-family: 'Barlow', sans-serif; font-size: 12px; font-weight: 600; color: var(--blue); background: none; border: 1px dashed var(--sky); border-radius: 4px; width: 100%; padding: 7px; cursor: pointer; transition: all 0.15s; }
+    .btn-upload:hover { background: #edf6fd; border-color: var(--blue); }
+
     /* ── ABOUT EDITOR ── */
     #aboutPanel { display: none; }
     .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start; }
@@ -159,6 +171,9 @@
 
   <!-- Endorsements -->
   <div id="endorsementsPanel">
+    <span class="about-section-label">Endorser Logos</span>
+    <div class="logo-editor-grid" id="logoGrid"></div>
+    <span class="about-section-label" style="margin-top:32px;">Endorsement Lists</span>
     <div class="grid" id="grid"></div>
   </div>
 
@@ -231,7 +246,9 @@
     FILES.endorsements.sha = endMeta.sha;
     FILES.about.sha        = aboutMeta.sha;
 
-    renderEndorsements(JSON.parse(b64decode(endMeta.content)));
+    const endData = JSON.parse(b64decode(endMeta.content));
+    renderLogos(endData.logos || []);
+    renderEndorsements(endData);
     renderAbout(JSON.parse(b64decode(aboutMeta.content)));
 
     document.getElementById('tokenScreen').style.display = 'none';
@@ -341,10 +358,79 @@
       </div>`).join('');
   }
 
+  // ── Logo editor ───────────────────────────────────────────────────────────
+
+  function renderLogos(logos) {
+    document.getElementById('logoGrid').innerHTML = logos.map((logo, i) => `
+      <div class="logo-card" data-index="${i}" data-src="${esc(logo.src)}">
+        <div class="logo-card-header">
+          <span class="logo-card-title">Logo ${i + 1}</span>
+        </div>
+        <div class="logo-preview">
+          <img src="${esc(logo.src)}" alt="${esc(logo.alt)}">
+        </div>
+        <div class="logo-card-body">
+          <div class="field-group">
+            <label class="field-label">Alt Text</label>
+            <input class="field-input logo-alt-input" value="${esc(logo.alt)}" oninput="markDirty()" />
+          </div>
+          <input type="file" accept="image/*" style="display:none" onchange="uploadLogo(this, ${i})">
+          <button class="btn-upload" onclick="this.previousElementSibling.click()">↑ Replace Image</button>
+        </div>
+      </div>`).join('');
+  }
+
+  async function uploadLogo(input, index) {
+    const file = input.files[0];
+    if (!file) return;
+    const ext  = file.name.split('.').pop().toLowerCase();
+    const path = `images/logo${index + 1}.${ext}`;
+    const card = document.querySelectorAll('#logoGrid .logo-card')[index];
+
+    const btn = card.querySelector('.btn-upload');
+    btn.textContent = 'Uploading…';
+    btn.disabled = true;
+
+    try {
+      const b64 = await new Promise((res, rej) => {
+        const reader = new FileReader();
+        reader.onload = () => res(reader.result.split(',')[1]);
+        reader.onerror = rej;
+        reader.readAsDataURL(file);
+      });
+
+      // Check for existing file SHA
+      let sha;
+      try { sha = (await ghFetch(path)).sha; } catch {}
+
+      const res = await fetch(`https://api.github.com/repos/${REPO}/contents/${path}`, {
+        method: 'PUT',
+        headers: { Authorization: `Bearer ${GH_TOKEN}`, Accept: 'application/vnd.github+json', 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: `Update logo ${index + 1} via CMS`, content: b64, ...(sha ? { sha } : {}) }),
+      });
+      if (!res.ok) throw new Error(res.status);
+
+      // Update preview and card src
+      card.dataset.src = path;
+      card.querySelector('.logo-preview img').src = path + '?t=' + Date.now();
+      markDirty();
+      showToast('Image uploaded — hit Save & Deploy to publish.', 'success');
+    } catch {
+      showToast('Image upload failed. Try again.', 'error');
+    } finally {
+      btn.textContent = '↑ Replace Image';
+      btn.disabled = false;
+    }
+  }
+
   // ── Collect data ──────────────────────────────────────────────────────────
 
   function collectEndorsements() {
     return {
+      logos: [...document.querySelectorAll('#logoGrid .logo-card')].map(card => ({
+        src: card.dataset.src,
+        alt: card.querySelector('.logo-alt-input').value.trim(),
+      })),
       categories: [...document.querySelectorAll('.column')].map(col => ({
         name: col.querySelector('.col-name-input').value.trim(),
         icon: col.dataset.icon,
