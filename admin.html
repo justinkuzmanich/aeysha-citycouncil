@@ -21,32 +21,12 @@
       --red:    #d94040;
     }
 
-    body {
-      font-family: 'Barlow', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-    }
+    body { font-family: 'Barlow', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
 
     /* ── HEADER ── */
-    header {
-      background: var(--navy);
-      color: var(--white);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.25);
-    }
-    .header-inner {
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 0 24px;
-      height: 60px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-    }
+    header { background: var(--navy); color: var(--white); position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 12px rgba(0,0,0,0.25); }
+    .header-inner { max-width: 1400px; margin: 0 auto; padding: 0 24px; height: 60px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .header-left { display: flex; align-items: center; gap: 12px; }
     .brand { font-family: 'Barlow Condensed', sans-serif; font-size: 16px; font-weight: 700; letter-spacing: 0.08em; color: var(--sky); }
     .page-title { font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.55); padding-left: 12px; border-left: 1px solid rgba(255,255,255,0.2); }
     .header-right { display: flex; align-items: center; gap: 10px; }
@@ -55,42 +35,20 @@
     .unsaved-badge.visible { display: flex; }
     .unsaved-dot { width: 7px; height: 7px; border-radius: 50%; background: #ffc842; }
 
-    .btn-open {
-      font-family: 'Barlow', sans-serif; font-size: 13px; font-weight: 600;
-      color: rgba(255,255,255,0.7); background: none;
-      border: 1px solid rgba(255,255,255,0.2); border-radius: 4px;
-      padding: 6px 14px; cursor: pointer; transition: all 0.15s;
-    }
-    .btn-open:hover { color: var(--white); border-color: rgba(255,255,255,0.5); }
+    .btn-preview { font-family: 'Barlow', sans-serif; font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.7); text-decoration: none; padding: 6px 14px; border: 1px solid rgba(255,255,255,0.2); border-radius: 4px; transition: all 0.15s; }
+    .btn-preview:hover { color: var(--white); border-color: rgba(255,255,255,0.5); }
 
-    .btn-save {
-      font-family: 'Barlow', sans-serif; font-size: 13px; font-weight: 700;
-      background: var(--blue); color: var(--white); border: none;
-      padding: 8px 20px; border-radius: 4px; cursor: pointer; transition: background 0.15s;
-    }
+    .btn-save { font-family: 'Barlow', sans-serif; font-size: 13px; font-weight: 700; background: var(--blue); color: var(--white); border: none; padding: 8px 20px; border-radius: 4px; cursor: pointer; transition: background 0.15s; }
     .btn-save:hover { background: #4a9dd0; }
     .btn-save:disabled { background: var(--muted); cursor: default; }
 
-    /* ── WELCOME SCREEN ── */
-    #welcome {
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      min-height: calc(100vh - 60px); gap: 20px; padding: 40px;
-      text-align: center;
-    }
-    .welcome-icon { font-size: 48px; margin-bottom: 8px; }
-    .welcome-h { font-family: 'Barlow Condensed', sans-serif; font-size: 28px; font-weight: 700; color: var(--navy); letter-spacing: 0.04em; }
-    .welcome-sub { font-size: 15px; color: var(--muted); max-width: 380px; line-height: 1.6; }
-    .btn-load {
-      font-family: 'Barlow', sans-serif; font-size: 15px; font-weight: 700;
-      background: var(--navy); color: var(--white); border: none;
-      padding: 14px 32px; border-radius: 6px; cursor: pointer;
-      transition: background 0.15s; margin-top: 8px;
-    }
-    .btn-load:hover { background: #24407a; }
-    .welcome-hint { font-size: 12px; color: var(--muted); }
+    /* ── SAVE INSTRUCTIONS BANNER ── */
+    .save-banner { background: #1a2a3a; color: rgba(255,255,255,0.8); font-size: 13px; text-align: center; padding: 10px 24px; line-height: 1.5; display: none; }
+    .save-banner.visible { display: block; }
+    .save-banner code { background: rgba(255,255,255,0.15); padding: 2px 6px; border-radius: 3px; font-size: 12px; }
 
     /* ── MAIN ── */
-    main { max-width: 1400px; margin: 0 auto; padding: 32px 24px 64px; display: none; }
+    main { max-width: 1400px; margin: 0 auto; padding: 32px 24px 64px; }
 
     .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; align-items: start; }
     @media (max-width: 960px) { .grid { grid-template-columns: 1fr; } }
@@ -99,22 +57,13 @@
     .column { background: var(--white); border-radius: 8px; border: 1px solid var(--border); overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
     .col-header { background: var(--navy); padding: 16px 20px; display: flex; align-items: center; gap: 12px; }
     .col-icon { font-size: 18px; color: var(--sky); flex-shrink: 0; }
-    .col-name-input {
-      font-family: 'Barlow Condensed', sans-serif; font-size: 17px; font-weight: 700;
-      letter-spacing: 0.06em; text-transform: uppercase;
-      color: var(--white); background: transparent; border: none;
-      border-bottom: 1px solid transparent; outline: none; width: 100%; padding: 2px 0;
-      transition: border-color 0.15s;
-    }
+    .col-name-input { font-family: 'Barlow Condensed', sans-serif; font-size: 17px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--white); background: transparent; border: none; border-bottom: 1px solid transparent; outline: none; width: 100%; padding: 2px 0; transition: border-color 0.15s; }
     .col-name-input:hover, .col-name-input:focus { border-bottom-color: var(--sky); }
     .col-count { font-size: 12px; color: rgba(255,255,255,0.45); flex-shrink: 0; white-space: nowrap; }
 
     /* ── ITEM LIST ── */
     .item-list { list-style: none; padding: 8px 0; min-height: 48px; }
-    .item {
-      display: flex; align-items: center; gap: 8px;
-      padding: 8px 12px; border-bottom: 1px solid var(--border); transition: background 0.1s;
-    }
+    .item { display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-bottom: 1px solid var(--border); transition: background 0.1s; }
     .item:last-child { border-bottom: none; }
     .item.drag-over { background: #e8f4fc; border-top: 2px solid var(--blue); }
     .item.dragging { opacity: 0.4; }
@@ -124,39 +73,20 @@
     .drag-handle:active { cursor: grabbing; }
 
     .item-fields { flex: 1; display: flex; flex-direction: column; gap: 3px; min-width: 0; }
-    .item-input {
-      font-family: 'Barlow', sans-serif; font-size: 13px; border: none; outline: none;
-      background: transparent; width: 100%; padding: 1px 0; color: var(--text);
-      border-bottom: 1px solid transparent; transition: border-color 0.15s;
-    }
+    .item-input { font-family: 'Barlow', sans-serif; font-size: 13px; border: none; outline: none; background: transparent; width: 100%; padding: 1px 0; color: var(--text); border-bottom: 1px solid transparent; transition: border-color 0.15s; }
     .item-input:focus { border-bottom-color: var(--blue); }
     .item-title-input { font-weight: 600; }
     .item-name-input  { color: var(--muted); font-size: 12px; }
 
-    .btn-delete {
-      flex-shrink: 0; background: none; border: none; color: var(--muted);
-      font-size: 15px; cursor: pointer; padding: 4px 6px; border-radius: 3px;
-      line-height: 1; transition: color 0.15s, background 0.15s;
-    }
+    .btn-delete { flex-shrink: 0; background: none; border: none; color: var(--muted); font-size: 15px; cursor: pointer; padding: 4px 6px; border-radius: 3px; line-height: 1; transition: color 0.15s, background 0.15s; }
     .btn-delete:hover { color: var(--red); background: #fdecea; }
 
-    /* ── FOOTER ── */
     .col-footer { padding: 12px; border-top: 1px solid var(--border); }
-    .btn-add {
-      font-family: 'Barlow', sans-serif; font-size: 13px; font-weight: 600;
-      color: var(--blue); background: none; border: 1px dashed var(--sky);
-      border-radius: 4px; width: 100%; padding: 8px; cursor: pointer; transition: all 0.15s;
-    }
+    .btn-add { font-family: 'Barlow', sans-serif; font-size: 13px; font-weight: 600; color: var(--blue); background: none; border: 1px dashed var(--sky); border-radius: 4px; width: 100%; padding: 8px; cursor: pointer; transition: all 0.15s; }
     .btn-add:hover { background: #edf6fd; border-color: var(--blue); }
 
     /* ── TOAST ── */
-    .toast {
-      position: fixed; bottom: 28px; left: 50%;
-      transform: translateX(-50%) translateY(12px);
-      background: var(--navy); color: var(--white); font-size: 13px; font-weight: 600;
-      padding: 10px 24px; border-radius: 6px; opacity: 0;
-      transition: opacity 0.2s, transform 0.2s; pointer-events: none; white-space: nowrap;
-    }
+    .toast { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(12px); background: var(--navy); color: var(--white); font-size: 13px; font-weight: 600; padding: 10px 24px; border-radius: 6px; opacity: 0; transition: opacity 0.2s, transform 0.2s; pointer-events: none; white-space: nowrap; }
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
     .toast.error { background: var(--red); }
   </style>
@@ -165,88 +95,50 @@
 
 <header>
   <div class="header-inner">
-    <div class="header-left" style="display:flex;align-items:center;gap:12px;">
+    <div class="header-left">
       <span class="brand">CORIO FOR CONCORD</span>
       <span class="page-title">Endorsements Admin</span>
     </div>
     <div class="header-right">
       <span class="unsaved-badge" id="unsavedBadge"><span class="unsaved-dot"></span> Unsaved changes</span>
-      <button class="btn-open" onclick="openFile()" id="openBtn" style="display:none">Open File</button>
-      <button class="btn-save" onclick="saveFile()" id="saveBtn" style="display:none">Save Changes</button>
+      <a href="index.html" target="_blank" class="btn-preview">Preview Site ↗</a>
+      <button class="btn-save" id="saveBtn" onclick="saveData()">Save Changes</button>
     </div>
   </div>
 </header>
 
-<!-- Welcome / load screen -->
-<div id="welcome">
-  <div class="welcome-icon">📋</div>
-  <h1 class="welcome-h">Endorsements Admin</h1>
-  <p class="welcome-sub">Open the <code>endorsements.json</code> file from your project to start editing.</p>
-  <button class="btn-load" onclick="openFile()">Open endorsements.json</button>
-  <p class="welcome-hint">Navigate to <strong>data / endorsements.json</strong> inside the project folder.</p>
+<div class="save-banner" id="saveBanner">
+  After saving, replace your local <code>data/endorsements.json</code> with the downloaded file, then run:
+  <code>git add data/endorsements.json &amp;&amp; git commit -m "update endorsements" &amp;&amp; git push</code>
 </div>
 
-<!-- CMS UI (hidden until file is loaded) -->
-<main id="main">
-  <div class="grid" id="grid"></div>
+<main>
+  <div class="grid" id="grid">
+    <div style="padding:40px;text-align:center;color:var(--muted);grid-column:1/-1">Loading endorsements…</div>
+  </div>
 </main>
 
 <div class="toast" id="toast"></div>
 
 <script>
-  let fileHandle = null;
   let dirty = false;
   let dragSrc = null;
 
-  // ── File Access ─────────────────────────────────────────────────────────
+  // ── Boot: fetch endorsements from the site ───────────────────────────────
 
-  async function openFile() {
-    try {
-      [fileHandle] = await window.showOpenFilePicker({
-        types: [{ description: 'JSON', accept: { 'application/json': ['.json'] } }],
-        multiple: false,
-        startIn: 'documents',
-      });
-      const file = await fileHandle.getFile();
-      const text = await file.text();
-      render(JSON.parse(text));
-      showCMS();
-    } catch (e) {
-      if (e.name !== 'AbortError') showToast('Could not open file.', true);
-    }
-  }
-
-  async function saveFile() {
-    if (!fileHandle) return;
-    const btn = document.getElementById('saveBtn');
-    btn.disabled = true;
-    btn.textContent = 'Saving…';
-    try {
-      const writable = await fileHandle.createWritable();
-      await writable.write(JSON.stringify(collectData(), null, 2));
-      await writable.close();
-      clearDirty();
-      showToast('Changes saved!');
-    } catch (e) {
-      showToast('Save failed.', true);
-    } finally {
-      btn.disabled = false;
-      btn.textContent = 'Save Changes';
-    }
-  }
-
-  function showCMS() {
-    document.getElementById('welcome').style.display = 'none';
-    document.getElementById('main').style.display = 'block';
-    document.getElementById('openBtn').style.display = 'inline-block';
-    document.getElementById('saveBtn').style.display = 'inline-block';
-  }
+  fetch('/data/endorsements.json')
+    .then(r => { if (!r.ok) throw new Error(); return r.json(); })
+    .then(data => render(data))
+    .catch(() => {
+      document.getElementById('grid').innerHTML =
+        '<div style="padding:40px;text-align:center;color:var(--red);grid-column:1/-1">' +
+        'Could not load endorsements.json.</div>';
+    });
 
   // ── Render ───────────────────────────────────────────────────────────────
 
   function render(data) {
-    const grid = document.getElementById('grid');
-    grid.innerHTML = data.categories.map((cat, ci) => `
+    document.getElementById('grid').innerHTML = data.categories.map((cat, ci) => `
       <div class="column" data-icon="${cat.icon}">
         <div class="col-header">
           <span class="col-icon">${cat.icon}</span>
@@ -267,12 +159,11 @@
 
   function itemHTML(e = {}) {
     return `
-      <li class="item" draggable="true"
-          ondragstart="onDragStart(event)" ondragend="onDragEnd(event)">
+      <li class="item" draggable="true" ondragstart="onDragStart(event)" ondragend="onDragEnd(event)">
         <span class="drag-handle" title="Drag to reorder">⠿</span>
         <div class="item-fields">
-          <input class="item-input item-title-input" value="${esc(e.title || '')}" placeholder="Title / Organization" oninput="markDirty()" />
-          <input class="item-input item-name-input"  value="${esc(e.name  || '')}" placeholder="Name" oninput="markDirty()" />
+          <input class="item-input item-title-input" value="${esc(e.title||'')}" placeholder="Title / Organization" oninput="markDirty()" />
+          <input class="item-input item-name-input"  value="${esc(e.name||'')}"  placeholder="Name" oninput="markDirty()" />
         </div>
         <button class="btn-delete" onclick="deleteItem(this)" title="Delete">✕</button>
       </li>`;
@@ -339,7 +230,7 @@
     markDirty();
   }
 
-  // ── Collect data from DOM ────────────────────────────────────────────────
+  // ── Collect & Save ───────────────────────────────────────────────────────
 
   function collectData() {
     return {
@@ -352,6 +243,20 @@
         })).filter(e => e.title || e.name),
       })),
     };
+  }
+
+  function saveData() {
+    const json = JSON.stringify(collectData(), null, 2);
+    const blob = new Blob([json], { type: 'application/json' });
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement('a');
+    a.href     = url;
+    a.download = 'endorsements.json';
+    a.click();
+    URL.revokeObjectURL(url);
+    clearDirty();
+    document.getElementById('saveBanner').classList.add('visible');
+    showToast('File downloaded!');
   }
 
   // ── Dirty state ──────────────────────────────────────────────────────────
@@ -375,13 +280,13 @@
     t.className = 'toast' + (isError ? ' error' : '');
     clearTimeout(toastTimer);
     requestAnimationFrame(() => requestAnimationFrame(() => t.classList.add('show')));
-    toastTimer = setTimeout(() => t.classList.remove('show'), 3000);
+    toastTimer = setTimeout(() => t.classList.remove('show'), 3500);
   }
 
   // ── Util ─────────────────────────────────────────────────────────────────
 
-  function esc(str) {
-    return String(str).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  function esc(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   }
 </script>
 </body>
