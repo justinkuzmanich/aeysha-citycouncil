@@ -2,7 +2,7 @@
   "categories": [
     {
       "name": "Elected officers",
-      "icon": "ÃÂ¢ÃÂÃÂ",
+      "icon": "★",
       "endorsements": [
         {
           "title": "Cool Kid",
@@ -88,7 +88,7 @@
     },
     {
       "name": "Law Enforcement",
-      "icon": "ÃÂ¢ÃÂÃÂ",
+      "icon": "⚖",
       "endorsements": [
         {
           "title": "Contra Costa Deputy Sheriffs Association",
@@ -174,7 +174,7 @@
     },
     {
       "name": "Community",
-      "icon": "ÃÂ¢ÃÂÃÂ¥",
+      "icon": "♥",
       "endorsements": [
         {
           "title": "Small Business Owner",
