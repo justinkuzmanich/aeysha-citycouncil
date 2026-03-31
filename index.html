@@ -115,7 +115,9 @@
     white-space: nowrap;
   }
   .nav-roll::after { color: #a8d4f0; }
-  .nav-active { color: #a8d4f0 !important; }
+  .nav-roll.nav-active { color: #a8d4f0 !important; }
+  .nav-roll.nav-active span { transform: translateY(-100%); }
+  .nav-roll.nav-active::after { transform: translateY(-100%); }
   .nav-roll:hover span {
     transform: translateY(-100%);
   }
@@ -315,7 +317,7 @@
   }
   .btn-primary:hover { background: #ffffff; color: #1b3060; border-color: #ffffff; transform: translateY(-1px); }
   .btn-hero-endorsements { background: #1b3060 !important; border-color: #1b3060 !important; }
-  .btn-hero-endorsements:hover { background: #ffffff !important; color: #1b3060 !important; border-color: #ffffff !important; }
+  .btn-hero-endorsements:hover { background: #111111 !important; color: #ffffff !important; border-color: #111111 !important; }
 
   /* Roll inner text */
   .btn-primary .btn-label {
@@ -356,7 +358,7 @@
     border: 1px solid #1b2f61;
     transition: all 0.2s;
   }
-  .btn-secondary:hover { border-color: #ffffff; color: #ffffff; transform: translateY(-1px); }
+  .btn-secondary:hover { background: #111111; border-color: #111111; color: #ffffff; transform: translateY(-1px); }
 
   .hero-scroll {
     z-index: 3;
