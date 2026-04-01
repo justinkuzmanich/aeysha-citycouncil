@@ -1497,24 +1497,29 @@
   @media (max-width: 600px) {
     nav { height: 70px; padding: 0 16px; }
     .nav-logo svg { width: 100px !important; height: 100px !important; }
+    .hero-inner {
+      flex-direction: column;
+    }
     .hero-bg-img {
-      height: 110vw;
-      min-height: 400px;
-      max-height: 560px;
-      object-position: center 5%;
+      width: 100%;
+      height: 65vw;
+      min-height: 220px;
+      max-height: 340px;
+      object-position: center top;
     }
     .hero-content-wrap {
-      padding: 36px 24px 48px 24px !important;
+      width: 100% !important;
+      padding: 32px 24px 48px 24px !important;
     }
     .hero-svg-logo {
-      margin-left: auto !important;
-      margin-right: auto !important;
-      margin-bottom: -30px !important;
-      align-self: center;
+      margin-left: 0 !important;
+      margin-right: 0 !important;
+      margin-bottom: 16px !important;
+      align-self: flex-start;
     }
     .hero-svg-logo svg {
-      width: 220px !important;
-      height: 220px !important;
+      width: 180px !important;
+      height: 180px !important;
     }
     .hero-tagline {
       font-size: 14px !important;
