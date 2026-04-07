@@ -1929,7 +1929,15 @@
       const bioBodies = document.querySelectorAll('.bio-body');
       data.bioSections.forEach((s, i) => {
         if (bioTags[i])   bioTags[i].textContent = s.tag;
-        if (bioBodies[i]) bioBodies[i].innerHTML  = s.paragraphs.map(p => `<p>${p}</p>`).join('');
+        if (bioBodies[i]) {
+          let html = s.paragraphs.map(p => `<p>${p}</p>`).join('');
+          if (s.roles && s.roles.length) {
+            html += '<ul style="margin-top:24px;list-style:none;padding:0;display:flex;flex-direction:column;gap:8px;">' +
+              s.roles.map(r => `<li style="font-size:13px;font-weight:600;letter-spacing:0.2em;text-transform:uppercase;color:#5aace0;">${r}</li>`).join('') +
+              '</ul>';
+          }
+          bioBodies[i].innerHTML = html;
+        }
       });
       const eyebrow = document.querySelector('.cred-eyebrow');
       if (eyebrow) eyebrow.textContent = data.credentials.eyebrow;
