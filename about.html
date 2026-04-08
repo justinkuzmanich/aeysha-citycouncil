@@ -1922,7 +1922,7 @@
   reveals.forEach(el => observer.observe(el));
 
   // Load copy from CMS
-  fetch('/data/about.json')
+  fetch('./data/about.json')
     .then(r => r.json())
     .then(data => {
       const bioTags   = document.querySelectorAll('.bio-tag');
