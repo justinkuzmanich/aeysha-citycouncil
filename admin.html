@@ -371,6 +371,10 @@
         </div>
         <div class="logo-card-body">
           <div class="field-group">
+            <label class="field-label">Caption</label>
+            <input class="field-input logo-caption-input" value="${esc(logo.caption || '')}" oninput="markDirty()" />
+          </div>
+          <div class="field-group">
             <label class="field-label">Alt Text</label>
             <input class="field-input logo-alt-input" value="${esc(logo.alt)}" oninput="markDirty()" />
           </div>
@@ -430,6 +434,7 @@
       logos: [...document.querySelectorAll('#logoGrid .logo-card')].map(card => ({
         src: card.dataset.src,
         alt: card.querySelector('.logo-alt-input').value.trim(),
+        caption: card.querySelector('.logo-caption-input').value.trim(),
       })),
       categories: [...document.querySelectorAll('.column')].map(col => ({
         name: col.querySelector('.col-name-input').value.trim(),

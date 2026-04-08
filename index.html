@@ -1664,15 +1664,25 @@
     border-radius: 12px;
     padding: 20px 24px;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     min-height: 126px;
+    gap: 12px;
   }
   .endorse-logo-item img {
     max-height: 98px;
     max-width: 100%;
     object-fit: contain;
     opacity: 1;
+  }
+  .endorse-logo-caption {
+    color: rgba(255,255,255,0.75);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-align: center;
+    text-transform: uppercase;
   }
   @media (max-width: 700px) {
     .endorse-logo-grid { grid-template-columns: repeat(2, 1fr); }
@@ -1775,10 +1785,10 @@
 
     <!-- ENDORSING ORGS LOGO GRID -->
     <div class="endorse-logo-grid" id="endorseLogoGrid">
-      <div class="endorse-logo-item"><img src="images/image3.webp" alt="Endorser logo"></div>
-      <div class="endorse-logo-item"><img src="images/image4.png" alt="Endorser logo"></div>
-      <div class="endorse-logo-item"><img src="images/image3.webp" alt="Endorser logo"></div>
-      <div class="endorse-logo-item"><img src="images/image4.png" alt="Endorser logo"></div>
+      <div class="endorse-logo-item"><img src="images/image3.webp" alt="Endorser logo"><span class="endorse-logo-caption"></span></div>
+      <div class="endorse-logo-item"><img src="images/image4.png" alt="Endorser logo"><span class="endorse-logo-caption"></span></div>
+      <div class="endorse-logo-item"><img src="images/image3.webp" alt="Endorser logo"><span class="endorse-logo-caption"></span></div>
+      <div class="endorse-logo-item"><img src="images/image4.png" alt="Endorser logo"><span class="endorse-logo-caption"></span></div>
     </div>
 
 
@@ -1816,11 +1826,13 @@
         .then(data => {
           // Render logos
           if (data.logos) {
-            const logoItems = document.querySelectorAll('#endorseLogoGrid .endorse-logo-item img');
+            const logoItems = document.querySelectorAll('#endorseLogoGrid .endorse-logo-item');
             data.logos.forEach((logo, i) => {
               if (!logoItems[i]) return;
-              logoItems[i].src = logo.src;
-              logoItems[i].alt = logo.alt;
+              logoItems[i].querySelector('img').src = logo.src;
+              logoItems[i].querySelector('img').alt = logo.alt;
+              const cap = logoItems[i].querySelector('.endorse-logo-caption');
+              if (cap) cap.textContent = logo.caption || '';
             });
           }
           // Render endorsement columns

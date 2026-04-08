@@ -2,19 +2,23 @@
   "logos": [
     {
       "src": "images/image3.webp",
-      "alt": "Contra Costa Deputy Sheriffs Association"
+      "alt": "Contra Costa Deputy Sheriffs Association",
+      "caption": "Contra Costa County Sheriffs Assn"
     },
     {
       "src": "images/logo2.png",
-      "alt": "Blu Sky Films"
+      "alt": "Blu Sky Films",
+      "caption": "BLUSKY FILMS"
     },
     {
       "src": "images/logo3.avif",
-      "alt": "The Corio Group"
+      "alt": "The Corio Group",
+      "caption": "The Corio Group"
     },
     {
       "src": "images/image4.png",
-      "alt": "California Association of Realtors"
+      "alt": "California Association of Realtors",
+      "caption": "CA Assn. of Realtors"
     }
   ],
   "categories": [
