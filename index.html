@@ -1629,9 +1629,22 @@
   }
   .endorse-list li {
     display: flex;
-    flex-direction: column;
-    padding: 12px 16px 12px 0;
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 16px 10px 0;
     border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .e-headshot {
+    width: 44px;
+    height: 44px;
+    border-radius: 4px;
+    object-fit: cover;
+    flex-shrink: 0;
+  }
+  .e-info {
+    display: flex;
+    flex-direction: column;
   }
   .endorse-list li:nth-last-child(-n+3):nth-child(3n+1),
   .endorse-list li:nth-last-child(-n+3):nth-child(3n+1) ~ li { border-bottom: none; }
@@ -1845,7 +1858,7 @@
             cols[i].querySelector('.endorse-col-title').textContent = cat.name;
             cols[i].querySelector('.endorse-list').innerHTML =
               cat.endorsements.map(e =>
-                `<li><span class="e-title">${e.title}</span><span class="e-name">${e.name}</span></li>`
+                `<li><img class="e-headshot" src="${e.headshot || 'images/headshot-default.svg'}" alt=""><div class="e-info"><span class="e-title">${e.title}</span><span class="e-name">${e.name}</span></div></li>`
               ).join('');
           });
         })

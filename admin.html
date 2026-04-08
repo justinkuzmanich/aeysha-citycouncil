@@ -73,6 +73,10 @@
     .col-count { font-size: 12px; color: rgba(255,255,255,0.45); flex-shrink: 0; white-space: nowrap; }
     .item-list { list-style: none; padding: 8px 0; min-height: 48px; }
     .item { display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-bottom: 1px solid var(--border); }
+    .item-headshot-wrap { position: relative; flex-shrink: 0; width: 36px; height: 36px; }
+    .item-headshot-preview { width: 36px; height: 36px; border-radius: 3px; object-fit: cover; display: block; border: 1px solid var(--border); }
+    .btn-headshot { position: absolute; inset: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.45); color: #fff; border: none; border-radius: 3px; font-size: 11px; cursor: pointer; opacity: 0; transition: opacity 0.15s; }
+    .item-headshot-wrap:hover .btn-headshot { opacity: 1; }
     .item:last-child { border-bottom: none; }
     .item.drag-over { background: #e8f4fc; border-top: 2px solid var(--blue); }
     .item.dragging { opacity: 0.4; }
@@ -304,15 +308,55 @@
   }
 
   function itemHTML(e = {}) {
+    const headshot = e.headshot || 'images/headshot-default.svg';
     return `
-      <li class="item" draggable="true" ondragstart="onDragStart(event)" ondragend="onDragEnd(event)">
+      <li class="item" draggable="true" ondragstart="onDragStart(event)" ondragend="onDragEnd(event)" data-headshot="${esc(headshot)}">
         <span class="drag-handle" title="Drag to reorder">⠿</span>
+        <div class="item-headshot-wrap">
+          <img class="item-headshot-preview" src="${esc(headshot)}" alt="">
+          <input type="file" accept="image/*" style="display:none" onchange="uploadHeadshot(this)">
+          <button class="btn-headshot" onclick="this.previousElementSibling.click()" title="Replace headshot">↑</button>
+        </div>
         <div class="item-fields">
           <input class="item-input item-title-input" value="${esc(e.title||'')}" placeholder="Title / Organization" oninput="markDirty()" />
           <input class="item-input item-name-input"  value="${esc(e.name||'')}"  placeholder="Name" oninput="markDirty()" />
         </div>
         <button class="btn-delete" onclick="deleteItem(this)" title="Delete">✕</button>
       </li>`;
+  }
+
+  async function uploadHeadshot(input) {
+    const file = input.files[0];
+    if (!file) return;
+    const ext  = file.name.split('.').pop().toLowerCase();
+    const path = `images/headshots/headshot-${Date.now()}.${ext}`;
+    const item = input.closest('.item');
+    const btn  = item.querySelector('.btn-headshot');
+    btn.textContent = '…';
+    btn.disabled = true;
+    try {
+      const b64 = await new Promise((res, rej) => {
+        const reader = new FileReader();
+        reader.onload = () => res(reader.result.split(',')[1]);
+        reader.onerror = rej;
+        reader.readAsDataURL(file);
+      });
+      const res = await fetch(`https://api.github.com/repos/${REPO}/contents/${path}`, {
+        method: 'PUT',
+        headers: { Authorization: `Bearer ${GH_TOKEN}`, Accept: 'application/vnd.github+json', 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: 'Upload headshot via CMS', content: b64 }),
+      });
+      if (!res.ok) throw new Error(res.status);
+      item.dataset.headshot = path;
+      item.querySelector('.item-headshot-preview').src = path + '?t=' + Date.now();
+      markDirty();
+      showToast('Headshot uploaded — hit Save & Deploy to publish.', 'success');
+    } catch {
+      showToast('Headshot upload failed. Try again.', 'error');
+    } finally {
+      btn.textContent = '↑';
+      btn.disabled = false;
+    }
   }
 
   // ── About render ──────────────────────────────────────────────────────────
@@ -439,10 +483,15 @@
       categories: [...document.querySelectorAll('.column')].map(col => ({
         name: col.querySelector('.col-name-input').value.trim(),
         icon: col.dataset.icon,
-        endorsements: [...col.querySelectorAll('.item')].map(item => ({
-          title: item.querySelector('.item-title-input').value.trim(),
-          name:  item.querySelector('.item-name-input').value.trim(),
-        })).filter(e => e.title || e.name),
+        endorsements: [...col.querySelectorAll('.item')].map(item => {
+          const e = {
+            title: item.querySelector('.item-title-input').value.trim(),
+            name:  item.querySelector('.item-name-input').value.trim(),
+          };
+          const hs = item.dataset.headshot;
+          if (hs && hs !== 'images/headshot-default.svg') e.headshot = hs;
+          return e;
+        }).filter(e => e.title || e.name),
       })),
     };
   }
