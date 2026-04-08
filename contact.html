@@ -1657,9 +1657,9 @@
 
 
   /* ===== CONTACT PAGE ===== */
-  .contact-wrap{display:grid;grid-template-columns:1fr 1fr;min-height:100vh;margin-top:0;}
-  .contact-photo{position:relative;overflow:hidden;}
-  .contact-photo img{width:100%;height:100%;object-fit:cover;object-position:center 20%;display:block;}
+  .contact-wrap{position:relative;min-height:100vh;padding-left:50%;}
+  .contact-photo{position:absolute;left:0;top:0;width:50%;height:100%;overflow:hidden;}
+  .contact-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 20%;display:block;}
   .contact-photo-overlay{position:absolute;inset:0;background:linear-gradient(to right,rgba(27,48,96,0.15),transparent);}
   .contact-form-panel{background:#ffffff;padding:148px 64px 72px;display:flex;flex-direction:column;justify-content:center;}
   .contact-eyebrow{font-size:15px;font-weight:600;letter-spacing:0.35em;text-transform:uppercase;color:#5aace0;margin-bottom:14px;display:block;}
@@ -1684,9 +1684,9 @@
   .contact-info a{color:#5aace0;text-decoration:none;}
   .contact-info a:hover{color:#1b3060;}
   @media(max-width:900px){
-    .contact-wrap{grid-template-columns:1fr;margin-top:0;}
-    .contact-photo{height:300px;}
-    .contact-form-panel{padding:80px 28px 48px;}
+    .contact-wrap{padding-left:0;}
+    .contact-photo{position:relative;width:100%;height:300px;}
+    .contact-form-panel{padding:48px 28px;}
     .form-row{grid-template-columns:1fr;}
   }
 
@@ -1734,7 +1734,7 @@
 
   <!-- PHOTO -->
   <div class="contact-photo">
-    <img style="transform:scaleX(-1) translateX(-25px);width:calc(100% + 25px);" src="images/image13.jpg" alt="Aeysha Corio">
+    <img style="transform:scaleX(-1);" src="images/image13.jpg" alt="Aeysha Corio">
     <div class="contact-photo-overlay"></div>
   </div>
 
