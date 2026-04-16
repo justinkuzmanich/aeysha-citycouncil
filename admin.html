@@ -299,7 +299,7 @@
           <button class="btn-add" onclick="addItemTop(this)">+ Add Endorsement</button>
         </div>
         <ul class="item-list" ondragover="onDragOver(event)" ondrop="onDrop(event)">
-          ${cat.endorsements.map(e => itemHTML(e)).join('')}
+          ${cat.endorsements.map(e => itemHTML(e, ci === 0)).join('')}
         </ul>
         <div class="col-footer">
           <button class="btn-add" onclick="addItem(this)">+ Add Endorsement</button>
@@ -307,16 +307,18 @@
       </div>`).join('');
   }
 
-  function itemHTML(e = {}) {
+  function itemHTML(e = {}, showHeadshot = false) {
     const headshot = e.headshot || 'images/headshot-default.svg';
-    return `
-      <li class="item" draggable="true" ondragstart="onDragStart(event)" ondragend="onDragEnd(event)" data-headshot="${esc(headshot)}">
-        <span class="drag-handle" title="Drag to reorder">⠿</span>
+    const headshotHTML = showHeadshot ? `
         <div class="item-headshot-wrap">
           <img class="item-headshot-preview" src="${esc(headshot)}" alt="">
           <input type="file" accept="image/*" style="display:none" onchange="uploadHeadshot(this)">
           <button class="btn-headshot" onclick="this.previousElementSibling.click()" title="Replace headshot">↑</button>
-        </div>
+        </div>` : '';
+    return `
+      <li class="item" draggable="true" ondragstart="onDragStart(event)" ondragend="onDragEnd(event)" data-headshot="${esc(headshot)}">
+        <span class="drag-handle" title="Drag to reorder">⠿</span>
+        ${headshotHTML}
         <div class="item-fields">
           <input class="item-input item-title-input" value="${esc(e.title||'')}" placeholder="Title / Organization" oninput="markDirty()" />
           <input class="item-input item-name-input"  value="${esc(e.name||'')}"  placeholder="Name" oninput="markDirty()" />
@@ -559,8 +561,10 @@
 
   function addItem(btn) {
     const list = btn.closest('.column').querySelector('.item-list');
+    const col = btn.closest('.column');
+    const isFirst = [...col.parentElement.children].indexOf(col) === 0;
     const tmp = document.createElement('div');
-    tmp.innerHTML = itemHTML();
+    tmp.innerHTML = itemHTML({}, isFirst);
     const li = tmp.firstElementChild;
     li.classList.add('new-item');
     list.appendChild(li);
@@ -572,8 +576,10 @@
 
   function addItemTop(btn) {
     const list = btn.closest('.column').querySelector('.item-list');
+    const col = btn.closest('.column');
+    const isFirst = [...col.parentElement.children].indexOf(col) === 0;
     const tmp = document.createElement('div');
-    tmp.innerHTML = itemHTML();
+    tmp.innerHTML = itemHTML({}, isFirst);
     const li = tmp.firstElementChild;
     li.classList.add('new-item');
     list.prepend(li);
