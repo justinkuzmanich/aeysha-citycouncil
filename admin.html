@@ -129,9 +129,35 @@
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
     .toast.error { background: var(--red); }
     .toast.success { background: var(--green); }
+
+    /* ── Crop modal ── */
+    .crop-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .crop-overlay.open { display:flex; }
+    .crop-box { background:#fff; border-radius:8px; padding:24px; width:480px; max-width:95vw; display:flex; flex-direction:column; gap:16px; }
+    .crop-box h3 { font-size:15px; font-weight:700; color:var(--text); margin:0; }
+    .crop-box .crop-img-wrap { width:100%; max-height:360px; overflow:hidden; background:#000; border-radius:4px; }
+    .crop-box .crop-img-wrap img { display:block; max-width:100%; }
+    .crop-actions { display:flex; gap:10px; justify-content:flex-end; }
+    .crop-actions button { padding:9px 20px; border-radius:3px; border:none; font-size:13px; font-weight:600; cursor:pointer; }
+    .btn-crop-cancel { background:#eee; color:#333; }
+    .btn-crop-confirm { background:var(--blue); color:#fff; }
+    .btn-crop-confirm:disabled { opacity:0.6; cursor:default; }
   </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css">
 </head>
 <body>
+
+<!-- Crop Modal -->
+<div class="crop-overlay" id="cropOverlay">
+  <div class="crop-box">
+    <h3>Crop Headshot</h3>
+    <div class="crop-img-wrap"><img id="cropImg" src="" alt=""></div>
+    <div class="crop-actions">
+      <button class="btn-crop-cancel" onclick="cancelCrop()">Cancel</button>
+      <button class="btn-crop-confirm" id="cropConfirmBtn" onclick="confirmCrop()">Crop & Upload</button>
+    </div>
+  </div>
+</div>
 
 <header>
   <div class="header-inner">
@@ -327,37 +353,63 @@
       </li>`;
   }
 
-  async function uploadHeadshot(input) {
+  let _cropperInstance = null;
+  let _cropInput = null;
+
+  function uploadHeadshot(input) {
     const file = input.files[0];
     if (!file) return;
-    const ext  = file.name.split('.').pop().toLowerCase();
-    const path = `images/headshots/headshot-${Date.now()}.${ext}`;
-    const item = input.closest('.item');
-    const btn  = item.querySelector('.btn-headshot');
-    btn.textContent = '…';
-    btn.disabled = true;
-    try {
-      const b64 = await new Promise((res, rej) => {
-        const reader = new FileReader();
-        reader.onload = () => res(reader.result.split(',')[1]);
-        reader.onerror = rej;
-        reader.readAsDataURL(file);
+    _cropInput = input;
+    const reader = new FileReader();
+    reader.onload = e => {
+      const img = document.getElementById('cropImg');
+      img.src = e.target.result;
+      if (_cropperInstance) { _cropperInstance.destroy(); _cropperInstance = null; }
+      document.getElementById('cropOverlay').classList.add('open');
+      _cropperInstance = new Cropper(img, {
+        aspectRatio: 1,
+        viewMode: 1,
+        autoCropArea: 0.9,
+        movable: true,
+        zoomable: true,
       });
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function cancelCrop() {
+    document.getElementById('cropOverlay').classList.remove('open');
+    if (_cropperInstance) { _cropperInstance.destroy(); _cropperInstance = null; }
+    if (_cropInput) { _cropInput.value = ''; _cropInput = null; }
+  }
+
+  async function confirmCrop() {
+    const btn = document.getElementById('cropConfirmBtn');
+    btn.disabled = true;
+    btn.textContent = 'Uploading…';
+    try {
+      const canvas = _cropperInstance.getCroppedCanvas({ width: 300, height: 300 });
+      const b64 = canvas.toDataURL('image/jpeg', 0.85).split(',')[1];
+      const path = `images/headshots/headshot-${Date.now()}.jpg`;
+      const item = _cropInput.closest('.item');
+
       const res = await fetch(`https://api.github.com/repos/${REPO}/contents/${path}`, {
         method: 'PUT',
         headers: { Authorization: `Bearer ${GH_TOKEN}`, Accept: 'application/vnd.github+json', 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: 'Upload headshot via CMS', content: b64 }),
       });
       if (!res.ok) throw new Error(res.status);
+
       item.dataset.headshot = path;
       item.querySelector('.item-headshot-preview').src = path + '?t=' + Date.now();
       markDirty();
       showToast('Headshot uploaded — hit Save & Deploy to publish.', 'success');
+      cancelCrop();
     } catch {
       showToast('Headshot upload failed. Try again.', 'error');
     } finally {
-      btn.textContent = '↑';
       btn.disabled = false;
+      btn.textContent = 'Crop & Upload';
     }
   }
 
@@ -668,5 +720,6 @@
     return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   }
 </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"></script>
 </body>
 </html>
