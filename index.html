@@ -1860,9 +1860,12 @@
           data.categories.forEach((cat, i) => {
             if (!cols[i]) return;
             cols[i].querySelector('.endorse-col-title').textContent = cat.name;
+            const showHeadshot = i === 0;
             cols[i].querySelector('.endorse-list').innerHTML =
               cat.endorsements.map(e =>
-                `<li><img class="e-headshot" src="${e.headshot || 'images/headshot-default.svg'}" alt=""><div class="e-info"><span class="e-title">${e.title}</span><span class="e-name">${e.name}</span></div></li>`
+                showHeadshot
+                  ? `<li><img class="e-headshot" src="${e.headshot || 'images/headshot-default.svg'}" alt=""><div class="e-info"><span class="e-title">${e.title}</span><span class="e-name">${e.name}</span></div></li>`
+                  : `<li><div class="e-info"><span class="e-title">${e.title}</span><span class="e-name">${e.name}</span></div></li>`
               ).join('');
           });
         })
